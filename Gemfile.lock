@@ -74,6 +74,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
+    open_uri_redirections (0.2.1)
     parallel (1.22.1)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
@@ -109,6 +110,7 @@ PLATFORMS
 DEPENDENCIES
   html-proofer (~> 3.18)
   jekyll-theme-chirpy (~> 5.1, >= 5.1.0)
+  open_uri_redirections
   tzinfo (~> 1.2)
   tzinfo-data
   wdm (~> 0.1.1)
