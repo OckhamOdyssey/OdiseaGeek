@@ -13,11 +13,11 @@ tags:
 - ddns
 - dns
 ---
-Si mi memoria no me falla, en 2018 se acabaron todas las direcciones IPv4 que se podían otorgar, lo que significa que tampoco se podía otorgar una misma IP a un único dispositivo, lo que se hacía era que cuando uno se desconectaba se liberaba su IP y se otorgaba a otro que se acababa de conectar. Todo esto lo gestiona las compañías de Internet, sabiendo el nivel de clientes que tienen a cada hora reparten las IPv4 que tienen para que nadie se quede sin conexión
+Si mi memoria no me falla, en 2018 se acabaron todas las direcciones IPv4 públicas que se podían dar, esto significa que tampoco se podía otorgar una misma IP a un único dispositivo, lo que hacían las operadoras de Internet era que, cuando se desconectaba un router, se liberaba su IP pública y se le otorgaba a otro. Esto también aumenta el precio de las direcciones IPv4 públicas y se especula sobre su uso.
 
 ## ¿Como afecta esto al DNS?
 
-El DNS se encarga de vincular una dirección URL con la dirección IP del servidor correspondiente. Un ejemplo de eso: nos es más fácil recordar wikipedia.org que 91.198.174.192. Somos capaces de recordar direcciones con un nombre más fácilmente que un conjunto de números.
+El DNS se encarga de vincular un FQDN (visualmente es parecido a una URL) con la dirección IP del servidor correspondiente. Esto facilita enórmemente la tarea de aprendernos las direcciones de acceso a nuestros servicios favoritos. Por ejemplo, si quieremos entrar en Wikipedia, nos es más fácil recordar `wikipedia.org` que `91.198.174.192`.
 
 El problema llega cuando la dirección 91.198.174.192 no es fija y la van cambiando cada cierto tiempo, en ese caso nos tendríamos que acordar cada vez de un número distinto y el DNS no serviría porque la IP vinculada a wikipedia.org ahora es posible que lleve a la IP de Google.
 
