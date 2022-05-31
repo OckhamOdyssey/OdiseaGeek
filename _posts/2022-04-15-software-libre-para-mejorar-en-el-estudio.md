@@ -23,7 +23,7 @@ Algunos se organizan con libretas, otros con una planificación por horas, con c
 
 ### Habitica
 
-![Logo de Habitica](/assets/2022/04/Icon.png)
+![Logo de Habitica](/assets/2022/04/Icon.png){: w="175" }
 
 
 Sin duda la aplicación por excelencia. [Habitica](https://habitica.com) transforma el crear hábitos en un juego de rol. Cumpliendo los objetivos diarios y periódicos haces daño a jefes y consigues experiencia con la que comprar objetos y obtener más bonus. En cambio, no cumplir con los objetivos restará vida a ti y a tus amigos. El sistema es simple y motivador y me ha ayudado a tener una checklist de las actividades pendientes de clase y de obligarme a revisar ciertas materias al menos una vez por semana.
@@ -38,7 +38,7 @@ Habitica es gratuita y de [código libre](https://github.com/HabitRPG/habitica).
 
 ### Super Productivity
 
-![](/assets/2022/04/favicon-192x192.png)
+![](/assets/2022/04/favicon-192x192.png){: w="175" }
 
 Mientras Habitica se centra en la organización de tareas y hábitos, el punto fuerte de <a href="https://super-productivity.com/" target="_blank">Super Productivity</a> es la ejecución. Nada más abrir la aplicación tenemos nos encontramos con las pestañas de "Hoy", "Línea de Tiempo" y "Programado". En estas tres pestañas se verán las tareas que tenemos planificadas y marcadas. Cuando se crea una tarea se le puede indicar el día y la hora a la que planeamos iniciarla, que subtareas tiene y cuánto tiempo le vamos a dedicar. Además, podemos ordenar las tareas por proyectos y etiquetas. La propia aplicación acepta integración con GitHub y, aunque se ha pedido, no se ha integrado aún con la API de Habitica, el programador voluntario que gestiona la aplicación ha dicho que se implementará si alguien decide ayudarle con esa parte.
 
@@ -56,7 +56,7 @@ Esta aplicación también es gratuita y de <a href="https://github.com/johannesj
 
 ## Blanket
 
-![](/assets/2022/04/com.rafaelmardojai.Blanket.svg)
+![](/assets/2022/04/com.rafaelmardojai.Blanket.svg){: w="175" }
 
 Como toda aplicación de GNOME que se precie, <a href="https://apps.gnome.org/es/app/com.rafaelmardojai.Blanket/" target="_blank">Blanket</a> es estúpidamente simple y, aun así, cumple perfectamente su cometido. Tal y como dice su descripción (porque el nombre no da muchas pistas), Blanket mejora la concentración y aumenta la productividad con diferentes sonidos ambiente.
 
@@ -68,7 +68,7 @@ Como toda aplicación de GNOME, es gratuita y libre. Se integra bien en el entor
 
 ## LanguageTool
 
-![](/assets/2022/04/LanguageTool_Logo_%282018%29.svg)
+![](/assets/2022/04/LanguageTool_Logo_%282018%29.svg){: w="175" }
 
 La herramienta Grammarly es bastante conocida en la comunidad de habla inglesa. Te ayuda a realizar mejores textos analizando tus oraciones morfológica y sintácticamente, pero es privativa y solo está disponible en inglés. Pues bien, la alternativa <a href="https://languagetool.org/es" target="_blank">LanguageTool</a> no solo es de <a href="https://github.com/languagetool-org/" target="_blank">código libre</a>, también está disponible en español, catalán, gallego, asturiano, portugués, polaco, alemán, francés, japonés y un largo, muy largo, etcétera.
 
@@ -80,7 +80,7 @@ Su uso es gratuito y ofrece un "modo perfeccionista" para aquellos que compren l
 
 ## MarkText
 
-![](/assets/2022/04/logo-small.png)
+![](/assets/2022/04/logo-small.png){: w="175" }
 
 No amé el Markdown hasta que no estaba ya hasta el cuello de exámenes, y me ha ayudado enormemente. Para aquellos que no lo conozcan, el lenguaje Markdown es una capa que se pone encima del HTML para poder hacer textos parecidos a un archivo Word sin escribir código ni tener que separar las manos del teclado. En este enlace os dejo <a href="https://miguelpaz.github.io/markdown-para-periodistas.html" target="_blank">otro artículo</a> explicándolo un poco y dando ejemplos. Pero se puede resumir como el lenguaje ideal para apuntes, tiene la misma potencia que un doc de Word sin la desventaja de que se te destroza todo cuando mueves una imagen un milímetro.
 
