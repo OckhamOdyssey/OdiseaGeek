@@ -54,7 +54,7 @@ Una vez acabemos el día podremos ver en qué hemos trabajado a lo largo de la s
 
 Esta aplicación también es gratuita y de <a href="https://github.com/johannesjo/super-productivity" target="_blank">código abierto</a>. Está disponible como <a href="https://app.super-productivity.com/" target="_blank">página web</a>, aplicación de escritorio para <a href="https://apps.apple.com/de/app/super-productivity/id1482572463?l=en&amp;mt=12" target="_blank">Mac</a>, <a href="https://github.com/johannesjo/super-productivity/releases" target="_blank">Linux</a> y <a href="https://www.microsoft.com/store/apps/9nhfvg8361tw?cid=storebadge&amp;ocid=badge" target="_blank">Windows</a> y aplicación móvil para <a href="https://play.google.com/store/apps/details?id=com.superproductivity.superproductivity" target="_blank">Android</a>. En ningún momento los datos salen de tu ordenador, ni siquiera en la aplicación web, todo se gestiona en tu ordenador y mediante cookies de navegador y se tiene la opción de sincronización con todos los dispositivos que quieras mediante un archivo que puedes guardar en tu Google Drive.
 
-## Blanket
+### Blanket
 
 ![](/assets/2022/04/com.rafaelmardojai.Blanket.svg){: w="175" }
 
@@ -66,7 +66,7 @@ Sé que a no todo el mundo le va el tema de los sonidos ambientales, pero darles
 
 Como toda aplicación de GNOME, es gratuita y libre. Se integra bien en el entorno de GNOME, pero se puede descargar en cualquier sistema GNU/Linux desde Flatpak o los repositorios oficiales.
 
-## LanguageTool
+### LanguageTool
 
 ![](/assets/2022/04/LanguageTool_Logo_%282018%29.svg){: w="175" }
 
@@ -78,7 +78,7 @@ Cuenta con su propio editor en línea, ideal para redactar correos electrónicos
 
 Su uso es gratuito y ofrece un "modo perfeccionista" para aquellos que compren la versión premium, no muy necesaria para el uso habitual, pero que a mí me vendrá de perlas para el proyecto de fin de curso.
 
-## MarkText
+### MarkText
 
 ![](/assets/2022/04/logo-small.png){: w="175" }
 
@@ -94,7 +94,7 @@ Otro gran acierto es que soporta de forma nativa el uso de <a href="https://merm
 
 Cabe decir que todo el texto que se pone, incluidas las flechas de los diagramas y las fórmulas matemáticas, se adaptan al modo oscuro o claro que pongas en la aplicación. Y luego puedes exportar el Markdown como PDF para verlo con claridad, añadiendo en las opciones de exportación si quieres cabeceras o pies de página.
 
-## Conclusión
+### Conclusión
 
 Herramientas no faltan. Una buena organización y un buen ambiente de estudio es ideal para ser eficiente. Yo he tenido la suerte de tener unas herramientas y unas amigas que me han ayudado a conseguir lo que creía imposible, que disfrute estudiando y eche de menos los momentos de exámenes finales que pasaba junto a ellas (quitando el maldito estrés). Por suerte mi época de estudios aún no ha terminado.
 
