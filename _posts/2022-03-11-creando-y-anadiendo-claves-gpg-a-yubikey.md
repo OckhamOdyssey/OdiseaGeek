@@ -36,7 +36,7 @@ Primero de todo, vamos a asegurarnos que los paquetes que necesitamos están ins
 
 Además, necesitamos habilitar el demonio de las tarjetas inteligentes.
 
-```bash
+```terminal
 sudo systemctl start pcscd
 sudo systemctl enable pcscd
 ```
@@ -84,7 +84,7 @@ Ahora toca crear las claves. Para usar la YubiKey de la mejor forma generaremos 
 
 Si no lo hemos hecho ya, salimos del prompt de la tarjeta. Ahora escribimos el comando para generar las claves.
 
-```bash
+```terminal
 gpg --full-gen-key
 ```
 
@@ -155,7 +155,7 @@ sub   rsa2048 2022-03-10 [E] [caduca: 2022-09-04]
 
 Ahora podemos ver las claves privadas que tenemos usando el siguiente comando:
 
-```bash
+```terminal
 gpg -K
 ```
 
@@ -192,7 +192,7 @@ Como podemos ver, no tenemos ninguna llave para autenticar (en el ejemplo del ll
 
 Como ya tenemos la clave de encriptado, solo necesitamos crear la de autentificación. Primero accedemos al prompt para editar la clave.
 
-```bash
+```terminal
 gpg --expert --edit-key
 ```
 
@@ -304,11 +304,11 @@ ssb  rsa2048/6654BAD4D79CA815
 
 Ahora que "el llavero" está completo podemos pasarlo a la YubiKey. Este proceso eliminará la clave privada de nuestro ordenador y la mantendrá solo en la YubiKey por lo que, si se extravía, ya no tendremos acceso a nuestra clave GPG. Para evitarlo, lo mejor será hacer una copia de seguridad y guardarla en otro lugar.
 
-```bash
+```terminal
 gpg --export-secret-key --armor clave_secreta.asc</div>
 ```
 
-```bash
+```terminal
 gpg --export-secret-subkeys --armor subclaves_secretas.asc
 ```
 
@@ -316,7 +316,7 @@ gpg --export-secret-subkeys --armor subclaves_secretas.asc
 
 Si por alguna razón se nos ha extraviado la clave privada o nos la han robado debemos revocarla, indicarle a todo el mundo que ya no es nuestra clave e invalidarla. Esto se consigue con un simple comando:
 
-```bash
+```terminal
 gpg --output revoke.asc --gen-revoke
 ```
 
@@ -324,7 +324,7 @@ gpg --output revoke.asc --gen-revoke
 
 Este es un proceso delicado si no hemos hecho el paso anterior, por eso vuelvo a insistir y recomiendo hacer una copia de seguridad de las claves antes. En esta fase se eliminarán las claves privadas y se almacenarán en distintas celdas de la tarjeta. Cada celda tiene un propósito; firmar, encriptar y autenticar; por eso hemos creado las subclaves. De esta forma la llave sabrá qué clave usar en qué momento. Por su parte, el sistema generará una referencia de nuestro llavero, indicando que las claves se almacenan en un dispositivo físico (smart card) y que debe ser insertada para utilizarse. La clave nunca se almacenará en el ordenador.
 
-```bash
+```terminal
 gpg --edit-key
 ```
 
@@ -390,7 +390,7 @@ Para hacer esto primero necesitamos asegurarnos que tenemos el sistema de person
 
 ### Firma
 
-```bash
+```terminal
 ykman openpgp keys set-touch SIG on
 ```
 
@@ -402,7 +402,7 @@ ykman openpgp keys set-touch ENC on
 
 ### Autenticación
 
-```bash
+```terminal
 ykman openpgp keys set-touch AUT on
 ```
 
@@ -410,7 +410,7 @@ ykman openpgp keys set-touch AUT on
 
 Ahora podemos comprobar que las claves han cambiado de lugar con un simple comando que ya hemos visto.
 
-```bash
+```terminal
 gpg -K
 ```
 
@@ -428,7 +428,7 @@ ssb>  rsa2048 2022-03-10 [A] [caduca: 2022-09-04]
 
 La diferencia es que en las claves ahora aparece el símbolo de mayor qué, esto significa que la clave no se encuentra en el ordenador, sino en la smart card. Ahora vamos a probar a firmar algo, un texto muy básico.
 
-```bash
+```terminal
 echo "test" | gpg --clearsign
 ```
 
