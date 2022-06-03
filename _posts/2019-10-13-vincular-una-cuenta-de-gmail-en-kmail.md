@@ -47,7 +47,6 @@ Vamos a preparar el sistema para permitir el acceso de KMail a nuestra cuenta de
 
 Es la hora del momento decisivo. Es muy importante que se haga siguiendo estos pasos y no desde la opción de "<strong>Añadir cuenta...</strong>", esta crea una configuración errónea de la cuenta que lleva a un error. Nos iremos a <strong>Preferencias</strong> y "<strong>Configuración de KMail...</strong>" y en "<strong>Recepción</strong>" le daremos a la opción de "<strong>Añadir cuenta de correo</strong>" dentro de la opción de añadir.
 
-<div class="wp-block-image">
 ![](/assets/2019/10/asistente-de-cuentas-editado.png)
 
 Escribiremos nuestro nombre, dirección de correo electrónico de Google y contraseña de este. <strong>Importante desmarcar las preferencias del proveedor</strong>.
@@ -67,7 +66,7 @@ Desde hace un tiempo al poner la contraseña en el último paso sale un mensaje 
 Con esto KMail ya debería poder acceder a Gmail y empezará a descargar los correos.
 
 ![](/assets/2019/10/sincronizacion-kmail-1024x599.png)
-<figcaption>Dependiendo de la cantidad de correos KMail tardará más o menos en terminar la sincronización. Esta cuenta la tengo desde 2013 y la sincronización tardó entre 3 y 4 horas.</figcaption>
+_Dependiendo de la cantidad de correos KMail tardará más o menos en terminar la sincronización. Esta cuenta la tengo desde 2013 y la sincronización tardó entre 3 y 4 horas._
 
 ## Resultados
 

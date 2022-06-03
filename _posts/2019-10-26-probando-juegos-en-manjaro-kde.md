@@ -29,7 +29,7 @@ tags:
 >ACTUALIZACIÓN: Se ha publicado una entrada más reciente con fecha a 5/3/22. [Pulse aquí para visitarla]({% post_url 2022-03-05-mi-experiencia-en-el-mundo-gaming-con-linux-por-que-el-futuro-se-ve-prometedor %}).
 {: .prompt-info }
 
-En la sección [Sobre mí]({% post_url about %}) he comentado los ordenadores que tengo ahora mismo, entre estos se encuentra un ordenador de torre montado a piezas con Windows 10. Desde hace un tiempo he querido cambiarme el sistema operativo a uno Linux y me he decantado por instalar Manjaro KDE.
+En la sección [Sobre mí](https://odiseageek.es/about/) he comentado los ordenadores que tengo ahora mismo, entre estos se encuentra un ordenador de torre montado a piezas con Windows 10. Desde hace un tiempo he querido cambiarme el sistema operativo a uno Linux y me he decantado por instalar Manjaro KDE.
 
 ## ¿Por qué Manjaro?
 
