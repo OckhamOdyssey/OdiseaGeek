@@ -15,9 +15,6 @@ tags:
 - licencia
 - virtual box
 - windows
-- windows 10
-- windows 2016 server
-- windows 7
 ---
 
 > Esta no es una solución oficial, puede no ser válida según la máquina virtual, modelo o versión del sistema operativo.
