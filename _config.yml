@@ -99,10 +99,10 @@ comments:
     issue_term:   # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
-    repo:             OckhamOdyssey/OdiseaGeek
-    repo_id:          R_kgDOHalIwg
-    category:         Giscus
-    category_id:      DIC_kwDOHalIws4CQVcU
+    repo:             OckhamOdyssey/OdiseaGeekGiscus
+    repo_id:          R_kgDOHsKqGQ
+    category:         General
+    category_id:      DIC_kwDOHsKqGc4CQVil
     mapping:          # optional, default to 'pathname'
     input_position:   top
     lang:             es
