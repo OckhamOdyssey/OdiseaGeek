@@ -68,6 +68,7 @@ En nuestro caso estamos en modo UEFI, por lo que a partir de ahora nos centrarem
 | `sda2`                | 512MiB     | Linux filesystem | EXT4        |
 | `sda3`                | Todo       | Linux filesystem | LUKS        |
 | `sdb1`                | Todo       | Linux filesystem | LUKS        |
+
 ## Particionado de discos
 
 Usaremos la herramienta fdisk para modificar el primer disco
