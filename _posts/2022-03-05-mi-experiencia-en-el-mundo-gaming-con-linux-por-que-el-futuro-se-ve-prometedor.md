@@ -63,7 +63,7 @@ Ahora mismo mi lista de juegos descargados en Linux es muy corta, dadme tiempo, 
 <li>The División: Categoría Plata</li>
 </ul>
 
-### Queda la Epic Store</h3>
+### Queda la Epic Store
 
 Primero de todo hay que decir que la Epic Store no está disponible para Linux, pero eso no significa que no podamos jugarlos. Los fans han creado un lanzador de juegos llamado Heroic Games Launcher. Con este, podemos acceder a los juegos de nuestra biblioteca de Epic y descargarlos junto a una versión de Wine o Proton compatible. ¿A que es genial? Por mi parte tengo ahí el Subnáutica, el Red Dead Redemption y el Knockout City (todos con categoría oro) y la mar de contento.
 
