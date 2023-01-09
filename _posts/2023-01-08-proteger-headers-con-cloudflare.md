@@ -79,4 +79,38 @@ http:
 
 He de decir que solo he probado la primera opción. Para implementarlo en Kubernetes, Rancher, Marathon o configurarlo usando el TOML de Traefik, toda la documentación oficial se encuentra en [este enlace][def3]
 
+## Headers en Apache
+Si queremos configurar los headers en Apache primero debemos activar el módulo correspondiente.
+
+```terminal
+sudo a2enmod headers
+```
+
+Ahora se edita el fichero de configuración del sitio al que le queremos añadir los headers, usualmente en `/etc/apache2/sites-enabled/archivo_configuración.conf`, añadimos una línea por cada cabecera, tienen la siguiente estructura. [Documentación oficial con las opciones de la directiva Header][def4]
+
+```
+Header always set X-Frame-Options "SAMEORIGIN"
+```
+
+Recordar que hay que reiniciar el servidor tras estos cambios.
+
+```terminal
+sudo systemctl restart apache2
+```
+
+## Headers en Nginx
+
+Dentro del archivo de configuración de Nginx en `/etc/nginx/nginx.conf` se pueden añadir líneas para añadir, eliminar y modificar headers. Aquí un ejemplo.
+
+```
+add_header X-Frame-Options SAMEORIGIN;
+```
+
+Tras esto, hay que reiniciar el servicio.
+
+```terminal
+sudo systemctl restart nginx
+```
+
 [def3]: https://doc.traefik.io/traefik/middlewares/http/headers/#configuration-examples
+[def4]: https://httpd.apache.org/docs/2.4/mod/mod_headers.html#Header
