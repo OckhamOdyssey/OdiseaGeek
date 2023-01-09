@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Proteger las cabeceras HTTP con Cloudflare
+title: Proteger las cabeceras HTTP con Cloudflare, Traefik, Apache y Nginx
 date: 2023-01-08 12:37:54 +02:00
 type: post
 published: true
