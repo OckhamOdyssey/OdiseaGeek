@@ -49,7 +49,7 @@ Para que una red local al uso funcione a la perfección requiere de estos tres c
 
 Estos dispositivos 3 en 1 suelen ser los que llamamos directamente "routers" y el que la gran mayoría de personas tienen en sus casas. Dependiendo de la compañía que se tenga contratada, será más laxa o menos a la hora de configurar tú mismo la red, añadiendo tu propio router para mayores gestiones o tu propio punto de acceso para ampliar la señal wifi.
 
-![](assets/2020/06/modem.jpg)
+![](/assets/2020/06/modem.jpg)
 _De izquierda a derecha podemos apreciar dos conectores coaxiales (módem), cuatro puertos Ethernet (router/switch) y una antena para la conexión innalámbrica (punto de acceso)._
 
 ![](/assets/2020/06/conexion-router-modem-raspberry-768x1024.jpg)
