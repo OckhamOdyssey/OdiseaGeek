@@ -21,7 +21,7 @@ Para los sistemas Arch o Red Hat, tener un .deb como único modo de instalación
 
 Mientras no tengas Discord actualizado te aparecerá un mensaje como el de la captura de arriba. Existe una forma de evitarlo en caso de no poder descargar o instalar la última versión. Solo tenemos que editar el archivo `~/.config/discord/settings.json` añadiendo la línea `"SKIP_HOST_UPDATE": true` **al final del JSON**, muy importante esto. Un ejemplo del resultado:
 
-```
+```json
 { 
   "IS_MAXIMIZED": true,
   "IS_MINIMIZED": false,
