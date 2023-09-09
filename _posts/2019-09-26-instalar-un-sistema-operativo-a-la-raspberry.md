@@ -22,23 +22,21 @@ tags:
 - sistema operativo
 - tutorialx
 ---
-Se conoce que la Raspberry es una herramienta excepcional para empezar en la informática, ya sea en programación, robótica... O incluso administración, porque si tienes pocos recursos puedes empezar a conocer los servicios, su funcionamiento y aplicarlos en tu casa gastando muy poco. Por ejemplo, puedes usar una Raspberry como servidor Samba para compartir recursos entre todos los ordenadores y todas las cuentas de la casa, como fotos. Es importante que sepamos bien que sistema operativo instalar en la Raspberry para sacarle el máximo provecho.
+Se conoce que la Raspberry es una herramienta excepcional para empezar en la informática, ya sea en programación, robótica... O incluso administración, porque si tienes pocos recursos puedes empezar a conocer los servicios, su funcionamiento y aplicarlos en tu casa gastando muy poco. Pero es importante que sepamos bien que sistema operativo instalar en la Raspberry para sacarle el máximo provecho.
 
 ## Qué necesitamos
 
-Cuando vas a comprar una Raspberry hay que fijarse bien en qué se compra, muchas veces es simplemente la placa y nada más, ni cargador ni nada, entonces es importante comprar un pack donde incluya el siguiente material mínimo o comprarlo por separado.
+Cuando vas a comprar una Raspberry hay que fijarse bien en qué modelo se compra, los modelos 1 y 2 están muy limitados y el 3 puede quedarse corto en según qué proyectos. También hay que fijarse en qué incluye la Raspberry que se compra, muchas veces es simplemente la placa y nada más, ni cable de alimentación siquiera. Al final, necesitaremos este material básico:
 
-<ul>
-<li><strong>Placa base.</strong> La propia Raspberry. Se debería mirar qué modelo comprar, según presupuesto y proyecto.</li>
-<li><strong>Cable de alimentación.</strong> Usan un voltaje distinto a los cables comunes por lo que hay que estar atento, mejor comprar uno original. La Raspberry Pi 4 usa un USB-C, el resto un Micro-USB.</li>
-<li><strong>Tarjeta MicroSD.</strong> Es la memoria principal de la Raspberry, donde estará el sistema. Puedes escoger el tamaño que quieras, luego puedes poner un USB para aumentar la memoria.</li>
-<li><strong>Periféricos de entrada.</strong> Importante mínimo un teclado por USB, para introducir las instrucciones en terminal o navegar por la interfaz si conoces los atajos, mejor poner también un ratón si vas a usar entorno gráfico.</li>
-<li><strong>Periféricos de salida.</strong> Tal vez no hagan falta tras configurarlo todo pero como mínimo en el primer inicio es lo mejor. También hay pantallas táctiles.</li>
-</ul>
+- **Placa base.** La propia Raspberry. Se debería mirar qué modelo comprar, según presupuesto y proyecto.
+- **Cable de alimentación.** Usan un voltaje distinto a los cables comunes por lo que hay que estar atento, mejor comprar uno original. La Raspberry Pi 4 usa un USB-C, el resto un Micro-USB.
+- **Tarjeta MicroSD.** Es la memoria principal de la Raspberry, donde estará el sistema. Puedes escoger el tamaño que quieras, luego puedes poner un USB para aumentar la memoria.
+- **Periféricos de entrada.** Importante mínimo un teclado por USB, para introducir las instrucciones en terminal o navegar por la interfaz si conoces los atajos, mejor poner también un ratón si vas a usar entorno gráfico.
+- **Periféricos de salida.** Tal vez no hagan falta tras configurarlo si lo vas a usar como servidor y conectarte por SSH, pero como mínimo en el primer inicio es lo mejor. También hay pantallas táctiles.
 
 ## Que sistema elegimos
 
-Aquí viene un asunto importante. Dependiendo de <strong>para qué</strong> vayamos a usar nuestra Raspberry instalaremos un sistema u otro. Se tendrá que buscar cual es el que más se acopla a las necesidades pero aquí voy a dejar algunos de mis recomendados.
+Este es el punto fuerte de la entrada. Los sistemas operativos para la Raspberry son muy variados y están bastante especializados.
 
 ### Raspbian
 ![Logo de Debian](/assets/2019/09/debian-logo.png)
@@ -66,7 +64,7 @@ A mi parecer el mejor modelo para usarlo es la Raspberry Pi 4.
 
 Es un centro multimedia de código libre. Se puede usar para añadir contenido a una TV antigua, sirviendo como almacenamiento de películas que guardes. Siempre ha habido mucha controversia por las extensiones de terceros que tiene, las cuales piratean series y canales de televisión.
 
-<a href="https://libreelec.tv/downloads_new/" target="_blank">Página oficial de descarga</a>
+<a href="https://libreelec.tv/downloads/raspberry/" target="_blank">Página oficial de descarga</a>
 
 ### RetroPi
 
@@ -82,7 +80,7 @@ Muy conocida por los melancólicos, aunque nunca me ha picado la curiosidad de p
 
 Es una versión adaptada de Nextcloud a ARM. Es un sistema utilizado como servidor en la nube. Se puede usar dentro de una red LAN o configurar para acceder desde el exterior. Tiene herramientas de visualización de PDF, ofimática en línea, etiquetas, cuotas de disco, envío de correos automáticos... lo que se necesite para crear un servicio en la nube completo.
 
-<a href="https://ownyourbits.com/nextcloudpi/" target="_blank">Página oficial de descarga</a>
+<a href="https://nextcloudpi.com/#debian-installation" target="_blank">Página oficial de descarga</a>
 
 ## Como instalar el sistema operativo
 
