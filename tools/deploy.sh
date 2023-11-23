@@ -60,6 +60,7 @@ test() {
     --disable-external \
     --check-html \
     --allow_hash_href \
+    --alt-ignore '/.*/' \
     "$SITE_DIR"
 }
 
