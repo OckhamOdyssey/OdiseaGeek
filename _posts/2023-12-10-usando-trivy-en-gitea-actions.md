@@ -193,11 +193,11 @@ Como punto de mejora, podemos hacer que Trivy nos devuelva los resultados en for
             exit-code: '0'
         - name: Create Issue
             env:
-            API_TOKEN: {% raw %}${{ secrets.SHIPYARD_ISSUES_TOKEN }}{% endraw %}
+            API_TOKEN: {% raw %}${{ secrets.ORG_ISSUES_TOKEN }}{% endraw %}
             run: |
             ISSUE_TITLE="Security report $(date +'%d/%m/%Y')"
             ISSUE_CONTENT=$(cat 'image-scan.txt' 'code-scan.txt')
             curl -X POST -H "Authorization: token ${API_TOKEN}" -H "Content-Type: application/json" \
                 -d "{\"title\": \"$ISSUE_TITLE\", \"body\": \"$ISSUE_CONTENT\"}" \
-                https://gitea.host.tld/api/v1/repos/shipyard/{% raw %}${{ steps.meta.outputs.REPO_NAME }}{% endraw %}/issues          
+                https://gitea.host.tld/api/v1/repos/user-or-org-name/{% raw %}${{ steps.meta.outputs.REPO_NAME }}{% endraw %}/issues          
     ````
