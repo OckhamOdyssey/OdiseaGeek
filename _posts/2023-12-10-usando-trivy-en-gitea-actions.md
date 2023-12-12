@@ -199,5 +199,5 @@ Como punto de mejora, podemos hacer que Trivy nos devuelva los resultados en for
             ISSUE_CONTENT=$(cat 'image-scan.txt' 'code-scan.txt')
             curl -X POST -H "Authorization: token ${API_TOKEN}" -H "Content-Type: application/json" \
                 -d "{\"title\": \"$ISSUE_TITLE\", \"body\": \"$ISSUE_CONTENT\"}" \
-                https://gitea.host.tld/api/v1/repos/user-or-org-name/{% raw %}${{ steps.meta.outputs.REPO_NAME }}{% endraw %}/issues          
+                https://gitea.host.tld/api/v1/repos/user-or-org-name/{% raw %}${{ steps.meta.outputs.REPO_NAME }}{% endraw %}/issues    
     ````
