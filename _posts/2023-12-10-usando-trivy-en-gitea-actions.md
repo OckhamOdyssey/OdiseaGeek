@@ -10,9 +10,10 @@ status: publish
 categories:
 - Seguridad Informática
 tags:
-- cloudflare
-- http
-- headers
+- github
+- git
+- gitea
+- cicd
 ---
 
 > Esta entrada cuenta con un [TL;DR](#tldr)
