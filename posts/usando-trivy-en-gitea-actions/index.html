@@ -1,0 +1,388 @@
+<!doctype html><html lang="es" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><meta name="generator" content="Jekyll v4.3.2" /><meta property="og:title" content="Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto." /><meta property="og:locale" content="es" /><meta name="description" content="Esta entrada cuenta con un TL;DR" /><meta property="og:description" content="Esta entrada cuenta con un TL;DR" /><link rel="canonical" href="https://odiseageek.es/posts/usando-trivy-en-gitea-actions/" /><meta property="og:url" content="https://odiseageek.es/posts/usando-trivy-en-gitea-actions/" /><meta property="og:site_name" content="Odisea Geek" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2023-12-12T16:31:00+01:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto." /><meta name="twitter:site" content="@OckhamOdyssey" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-12-12T17:32:04+01:00","datePublished":"2023-12-12T16:31:00+01:00","description":"Esta entrada cuenta con un TL;DR","headline":"Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.","mainEntityOfPage":{"@type":"WebPage","@id":"https://odiseageek.es/posts/usando-trivy-en-gitea-actions/"},"url":"https://odiseageek.es/posts/usando-trivy-en-gitea-actions/"}</script><title>Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto. | Odisea Geek</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Odisea Geek"><meta name="application-name" content="Odisea Geek"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.3/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css"> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return 'mode'; } static get MODE_ATTR() { return 'data-mode'; } static get DARK_MODE() { return 'dark'; } static get LIGHT_MODE() { return 'light'; } static get ID() { return 'mode-toggle'; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia('(prefers-color-scheme: dark)'); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { document.documentElement.removeAttribute(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage( { direction: ModeToggle.ID, message: this.modeStatus }, '*' ); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body><aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end"><header class="profile-wrapper"> <a href="/" id="avatar" class="rounded-circle"> <img src="https://avatars.githubusercontent.com/u/60941836?v=4" width="112" height="112" alt="avatar" onerror="this.style.display='none'"> </a><h1 class="site-title"> <a href="/">Odisea Geek</a>
+</h1>
+<p class="site-subtitle fst-italic mb-0">Mi experiencia en el mundo de la informática.</p></header><nav class="flex-column flex-grow-1 w-100 ps-0"><ul class="nav">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home"></i> <span>INICIO</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream"></i> <span>CATEGORÍAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag"></i> <span>ETIQUETAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive"></i> <span>ARCHIVO</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle"></i> <span>SOBRE MÍ</span> </a>
+</li>
+</ul></nav><div class="sidebar-bottom d-flex flex-wrap align-items-center w-100"> <button type="button" class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/OckhamOdyssey" aria-label="github" target="_blank" rel="noopener noreferrer"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/OckhamOdyssey" aria-label="twitter" target="_blank" rel="noopener noreferrer"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20['admin','odiseageek.es'].join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a> <a href="https://www.linkedin.com/in/nicolas-sariego-75670480/" aria-label="linkedin" target="_blank" rel="noopener noreferrer"> <i class="fab fa-linkedin"></i> </a>
+</div></aside><div id="main-wrapper" class="d-flex justify-content-center">
+<div class="container d-flex flex-column px-xxl-5">
+<header id="topbar-wrapper" aria-label="Top Bar"><div id="topbar" class="d-flex align-items-center justify-content-between px-lg-3 h-100">
+<nav id="breadcrumb" aria-label="Breadcrumb"> <span> <a href="/"> Inicio </a> </span> <span>Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.</span></nav><button type="button" id="sidebar-trigger" class="btn btn-link"> <i class="fas fa-bars fa-fw"></i> </button><div id="topbar-title"> Post</div>
+<button type="button" id="search-trigger" class="btn btn-link"> <i class="fas fa-search fa-fw"></i> </button> <search class="align-items-center ms-3 ms-lg-0"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Buscar..."> </search> <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancelar</button>
+</div></header><div class="row flex-grow-1">
+<main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4"><article class="px-1"><header><h1 data-toc-skip>Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.</h1>
+<div class="post-meta text-muted"> <span> Publicado <time data-ts="1702395060" data-df="DD/MM/YYYY" data-bs-toggle="tooltip" data-bs-placement="bottom"> 12/12/2023 </time> </span> <span> Actualizado <time data-ts="1702398724" data-df="DD/MM/YYYY" data-bs-toggle="tooltip" data-bs-placement="bottom"> 12/12/2023 </time> </span><div class="d-flex justify-content-between"> <span> Por <em> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a> </em> </span> <span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="1392 palabras"> <em>7 min</em> de lectura</span>
+</div>
+</div></header><div class="content">
+<blockquote class="prompt-tip"><p>Esta entrada cuenta con un <a href="#tldr">TL;DR</a></p></blockquote>
+<p>Voy a explicar como implementar Trivy en el CI/CD de Gitea. Si no sabes muy bien alguno de esos puntos lo explicaré a continuación, si no, puedes bajar directamente al apartado de <a href="#creando-un-gitea-action">implementación</a>.</p>
+<h2 id="qué-es-cicd">
+<span class="me-2">Qué es CI/CD</span><a href="#qu%C3%A9-es-cicd" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>CI/CD viene de las siglas <strong>Continuous Integration/Continuous Delivery</strong> o <strong>Implementación Contínua/Despliegue Contínuo</strong> y viene siendo, a grandes rasgos, automatizar cosas durante el desarrollo de código. Estos son los puntos clave:</p>
+<ul>
+<li>
+<strong>Automatización de compilación y testeo</strong>: Automáticamente, con cada cambio en el repositorio git, se compila el nuevo código y se realizan pruebas para detectar fallos de forma temprana.</li>
+<li>
+<strong>Reportes intantáneos</strong>: Si algún test falla, se reporta automáticamente para que se pueda solucionar lo antes posible.</li>
+<li>
+<strong>Asegurar la calidad del código</strong>: Los entornos de desarrollo pueden tener definidas ciertas políticas, estándares, buenas prácticas… básicamente, unas normas. Puede velar por el cumplimiento de las buenas prácticas de la empresa.</li>
+<li>
+<strong>Despliegues automáticos en producción</strong>: A cada cambio en el repositorio y tras pasar las pruebas, se puede automatizar el despliegue en los servidores de producción, evitando así tener que hacerlo manualmente.</li>
+</ul>
+<p>En resumidas cuentas, gracias al CI/CD se reduce el tiempo de despliegue, el error humano y se flexibilizan y estandarizan los procesos de prueba y despliegue. Igulamente, intentaré dedicar una entrada a parte a explicar la metodología DevOps y DevSecOps, aunque Internet ya esté plagado de ellas.</p>
+<h3 id="automatizaciones-de-seguridad-por-cicd">
+<span class="me-2">Automatizaciones de seguridad por CI/CD</span><a href="#automatizaciones-de-seguridad-por-cicd" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Los CI/CD pueden aprovecharse para automatizar ciertos controles de seguridad como vigilar los principales riesgos de las aplicaciones web con el OWASP Top 10 (SQLi, XSS, pérdidas de control de acceso…), avisar de incumplimientos de las políticas de seguridad de código, dependencias vulnerables, contenedores desactualizados, código malicioso ofuscado y todo lo que se te ocurra. Las posibilidades son enormes. Por ejemplo, abrir una issue si detecta secretos en el último commit, bloquear un pull requests a <code class="language-plaintext highlighter-rouge">master</code> si una llamada permite una inyección SQL o mandar un correo si hay que actualizar la imagen docker que se usa como base.</p>
+<h2 id="introduciendo-trivy-el-escáner-de-seguridad-de-código-abierto">
+<span class="me-2">Introduciendo Trivy, el escáner de seguridad de código abierto</span><a href="#introduciendo-trivy-el-esc%C3%A1ner-de-seguridad-de-c%C3%B3digo-abierto" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p><a href="https://raw.githubusercontent.com/aquasecurity/trivy/main/docs/imgs/logo.png" class="popup img-link shimmer"><img src="https://raw.githubusercontent.com/aquasecurity/trivy/main/docs/imgs/logo.png" alt="" width="175" loading="lazy"></a></p>
+<p>Ahora bien, toda esta magia debe hacerse con las herramientas adecuadas. Soy consciente que la mayoría de estas implementaciones solo son viables en entornos empresariales y no en proyectos de prueba que a las 3 semanas quedan en el olvido (a no ser que seas un rarito de la seguridad como yo que gasta más tiempo trasteando con estas cosas que en el propio proyecto).</p>
+<p>Una herramienta con la que he tenido buenos resultados, es sencilla y es de código libre es <strong>Trivy</strong>, un escaner de seguridad de código libre creado por <a href="https://www.aquasec.com/">Aqua Security</a>. En esta entrada veremos como integrarlo en un CI/CD para escanear el código de un repositorio git y la última imagen docker creada en base a este, pero también es posible usarlo para detectar vulnerabilidades en dependencias de código o de sistemas, fallos en IaaC, Kubernetes y alguna cosa más. También puede usarse vía CLI para lanzarlo manualmente mientras se escribe código o se compila una imagen en local.</p>
+<h2 id="introduciendo-gitea-actions-un-github-ligero-y-abierto">
+<span class="me-2">Introduciendo Gitea Actions, un GitHub ligero y abierto</span><a href="#introduciendo-gitea-actions-un-github-ligero-y-abierto" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p><a href="https://about.gitea.com/gitea-text.svg" class="popup img-link shimmer"><img src="https://about.gitea.com/gitea-text.svg" alt="" width="175" loading="lazy"></a></p>
+<p>Aunque sigo teniendo GitHub para cosas puntuales, desde hace más de un año que llevo usando Gitea como mi servidor git remoto, en él tengo mi propia organización, repositorios propios públicos y privados, mis imágenes docker personalizadas y, por supuesto, mis pipelines.</p>
+<h2 id="creando-un-gitea-action">
+<span class="me-2">Creando un Gitea Action</span><a href="#creando-un-gitea-action" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<blockquote class="prompt-info"><p>El Gitea Actions es compatible con GitHub Actions, si hiciera falta alguna modificación, se avisa en el texto.</p></blockquote>
+<ol>
+<li>Primero vamos a crear el archivo YAML que Gitea detectará automáticamente para ejecutar el workflow, este será en <code class="language-plaintext highlighter-rouge">.gitea/workflows/security.yml</code>. Si es para GitHub, debe estar en el directorio <code class="language-plaintext highlighter-rouge">.github/workflows/</code>.</li>
+<li>
+<p>Ahora, en el archivo, definimos el nombre de la acción y cuando se ejecutará, en este ejercicio haremos que se lance todos los días 15 a las 4AM.</p>
+<div class="language-yaml highlighter-rouge">
+<div class="code-header"> <span data-label-text="YAML"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td>
+<td class="rouge-code"><pre> <span class="na">name</span><span class="pi">:</span> <span class="s">Security Scan</span>
+
+ <span class="na">on</span><span class="pi">:</span>
+ <span class="na">schedule</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="na">cron</span><span class="pi">:</span> <span class="s2">"</span><span class="s">0</span><span class="nv"> </span><span class="s">4</span><span class="nv"> </span><span class="s">15</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>
+<p>Añadimos el espacio de trabajo desde el que se ejecutará todo:</p>
+<div class="language-yaml highlighter-rouge">
+<div class="code-header"> <span data-label-text="YAML"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td>
+<td class="rouge-code"><pre> <span class="na">jobs</span><span class="pi">:</span>
+ <span class="na">scan</span><span class="pi">:</span>
+     <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+     <span class="na">container</span><span class="pi">:</span>
+     <span class="na">image</span><span class="pi">:</span> <span class="s">catthehacker/ubuntu:act-latest</span> <span class="c1"># Ubuntu image compatible with nektos/act, the gitea action runner</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>Dentro, añadimos un punto para obtener el último commit y otro para sacar el nombre del repositorio:<div class="language-yaml highlighter-rouge">
+<div class="code-header"> <span data-label-text="YAML"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre>     <span class="na">steps</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout</span>
+         <span class="s">uses</span><span class="err">:</span> <span class="s">actions/checkout@v3</span>
+         <span class="s">with</span><span class="err">:</span>
+         <span class="na">fetch-depth</span><span class="pi">:</span> <span class="m">0</span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Get Meta</span>
+         <span class="s">id</span><span class="err">:</span> <span class="s">meta</span>
+         <span class="s">run</span><span class="err">:</span> <span class="pi">|</span>
+         <span class="s">echo REPO_NAME=$(echo ${GITHUB_REPOSITORY} | awk -F"/" '{print $2}') &gt;&gt; $GITHUB_OUTPUT        </span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>Ahora hacemos el escaneo de la última imagen usando el paso de trivy. Como parámetros le indicaremos que nos muestre únicamente las vulnerabilidades corregidas, en una tabla, que nos vuelque todo a un archivo, y que el código de error sea siempre 0.<div class="language-yaml highlighter-rouge">
+<div class="code-header"> <span data-label-text="YAML"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre>     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Image Scan</span>
+         <span class="s">uses</span><span class="err">:</span> <span class="s">aquasecurity/trivy-action@master</span>
+         <span class="s">with</span><span class="err">:</span>
+         <span class="na">image-ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gitea.host.tld/user-or-org-name/${{</span><span class="nv"> </span><span class="s">steps.meta.outputs.REPO_NAME</span><span class="nv"> </span><span class="s">}}:latest'</span>
+         <span class="na">format</span><span class="pi">:</span> <span class="s1">'</span><span class="s">table'</span>
+         <span class="na">exit-code</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0'</span>
+         <span class="na">ignore-unfixed</span><span class="pi">:</span> <span class="kc">true</span>
+         <span class="na">vuln-type</span><span class="pi">:</span> <span class="s1">'</span><span class="s">os,library'</span>
+         <span class="na">output</span><span class="pi">:</span> <span class="s1">'</span><span class="s">image-scan.txt'</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>Hacemos lo mismo con el escaneo en el propio repositorio. Como ya lo hemos descargado en el paso 4, usamos la opción <code class="language-plaintext highlighter-rouge">fs</code> (filesystem).<div class="language-yaml highlighter-rouge">
+<div class="code-header"> <span data-label-text="YAML"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td>
+<td class="rouge-code"><pre>     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Code Scan</span>
+         <span class="s">uses</span><span class="err">:</span> <span class="s">aquasecurity/trivy-action@master</span>
+         <span class="s">with</span><span class="err">:</span>
+         <span class="na">scan-type</span><span class="pi">:</span> <span class="s1">'</span><span class="s">fs'</span>
+         <span class="na">ignore-unfixed</span><span class="pi">:</span> <span class="kc">true</span>
+         <span class="na">format</span><span class="pi">:</span> <span class="s1">'</span><span class="s">table'</span>
+         <span class="na">output</span><span class="pi">:</span> <span class="s1">'</span><span class="s">code-scan.txt'</span>
+         <span class="na">exit-code</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0'</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>Este último paso sí que difiere. En GitHub existe un paso creado por la comunidad para subir issues al proyecto. Como en Gitea no es posible, usaremos la API para publicar el contenido de ambos ficheros.<div class="language-yaml highlighter-rouge">
+<div class="code-header"> <span data-label-text="YAML"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre>     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Create Issue</span>
+         <span class="s">env</span><span class="err">:</span>
+         <span class="na">API_TOKEN</span><span class="pi">:</span> <span class="s">${{ secrets.ORG_ISSUES_TOKEN }}</span>
+         <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+         <span class="s">ISSUE_TITLE="Security report $(date +'%d/%m/%Y')"</span>
+         <span class="s">ISSUE_CONTENT=$(cat 'image-scan.txt' 'code-scan.txt')</span>
+         <span class="s">curl -X POST -H "Authorization: token ${API_TOKEN}" -H "Content-Type: application/json" \</span>
+             <span class="s">-d "{\"title\": \"$ISSUE_TITLE\", \"body\": \"$ISSUE_CONTENT\"}" \</span>
+             <span class="s">https://gitea.host.tld/api/v1/repos/user-or-org-name/${{ steps.meta.outputs.REPO_NAME }}/issues</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+</ol>
+<p>Podemos guardar el archivo, pero no hemos terminado. En el último paso, podemos ver que hemos definido la variable <code class="language-plaintext highlighter-rouge">API_TOKEN</code> y hace referencia a <code class="language-plaintext highlighter-rouge">${{ secrets.ORG_ISSUES_TOKEN }}</code>. Este es un secreto que solo el CI puede consultar. Pero claro, primero debemos crearlo.</p>
+<h3 id="definiendo-el-secreto">
+<span class="me-2">Definiendo el secreto</span><a href="#definiendo-el-secreto" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>El secreto va a ser un API Token para publicar issues. Siguiendo la política de privilegio mínimo, vamos a crear uno únicamente con este fin. Accedemos a la configuración del usuario y en <strong>Aplicaciones</strong> podremos crear el token de escritura en las issues.</p>
+<p><a href="/assets/2023/12/gitea-token-creation.png" class="popup img-link shimmer"><img src="/assets/2023/12/gitea-token-creation.png" alt="" loading="lazy"></a></p>
+<p>Ahora toca copiar el token resultante y definirlo como secreto en los <strong>Ajustes de usuario</strong> &gt; <strong>Acciones</strong> &gt; <strong>Secretos</strong>. Para esta ocasión, y como el token se va a usar en otros proyectos, lo definiré a nivel de organización desde la <strong>Configuración de la organización</strong> &gt; <strong>Acciones</strong> &gt; <strong>Secretos</strong>.</p>
+<p><a href="/assets/2023/12/gitea-secret-creation.png" class="popup img-link shimmer"><img src="/assets/2023/12/gitea-secret-creation.png" alt="" loading="lazy"></a></p>
+<p>Como el proyecto desde el que se ejecuta el workflow es parte de la organización, el secreto se puede consultar durante la ejecución.</p>
+<h3 id="comprobación">
+<span class="me-2">Comprobación</span><a href="#comprobaci%C3%B3n" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Cuando llegue el momento, el CI ejecutará el workflow y lanzará el escaneo de seguridad como hemos definido.</p>
+<p><a href="/assets/2023/12/security-scan-ci.png" class="popup img-link shimmer"><img src="/assets/2023/12/security-scan-ci.png" alt="" loading="lazy"></a></p>
+<p>Y veremos como el usuario del API Token ha creado un issue con una tabla bastante amorfa (pero entendible) con los resultados.</p>
+<p><a href="/assets/2023/12/gitea-ci-issue-creation.png" class="popup img-link shimmer"><img src="/assets/2023/12/gitea-ci-issue-creation.png" alt="" loading="lazy"></a></p>
+<p>Como punto de mejora, podemos hacer que Trivy nos devuelva los resultados en formato JSON y, luego, nosotros lo parseamos a una tabla Markdown más aseada o en el formato que deseemos.</p>
+<h2 id="tldr">
+<span class="me-2">TL;DR</span><a href="#tldr" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<ol>
+<li>Crear un secreto con el API Token para crear issues en el proyecto. Llamarlo <code class="language-plaintext highlighter-rouge">ORG_ISSUES_TOKEN</code> y guardarlo en el proyecto o la organización.</li>
+<li>Usamos este código como workflow:<div class="language-yaml highlighter-rouge">
+<div class="code-header"> <span data-label-text="YAML"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+</pre></td>
+<td class="rouge-code"><pre> <span class="na">name</span><span class="pi">:</span> <span class="s">Security Scan</span>
+
+ <span class="na">on</span><span class="pi">:</span>
+ <span class="na">schedule</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="na">cron</span><span class="pi">:</span> <span class="s2">"</span><span class="s">0</span><span class="nv"> </span><span class="s">4</span><span class="nv"> </span><span class="s">15</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span>
+
+ <span class="na">jobs</span><span class="pi">:</span>
+ <span class="na">scan</span><span class="pi">:</span>
+     <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+     <span class="na">container</span><span class="pi">:</span>
+     <span class="na">image</span><span class="pi">:</span> <span class="s">catthehacker/ubuntu:act-latest</span> <span class="c1"># Ubuntu image compatible with nektos/act, the gitea action runner</span>
+     <span class="na">steps</span><span class="pi">:</span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout</span>
+         <span class="s">uses</span><span class="err">:</span> <span class="s">actions/checkout@v3</span>
+         <span class="s">with</span><span class="err">:</span>
+         <span class="na">fetch-depth</span><span class="pi">:</span> <span class="m">0</span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Get Meta</span>
+         <span class="s">id</span><span class="err">:</span> <span class="s">meta</span>
+         <span class="s">run</span><span class="err">:</span> <span class="pi">|</span>
+         <span class="s">echo REPO_NAME=$(echo ${GITHUB_REPOSITORY} | awk -F"/" '{print $2}') &gt;&gt; $GITHUB_OUTPUT</span>
+         <span class="s">echo REPO_VERSION=$(git describe --tags --always | sed 's/^v//') &gt;&gt; $GITHUB_OUTPUT            </span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Image Scan</span>
+         <span class="s">uses</span><span class="err">:</span> <span class="s">aquasecurity/trivy-action@master</span>
+         <span class="s">with</span><span class="err">:</span>
+         <span class="na">image-ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gitea.host.tld/user-or-org-name/${{</span><span class="nv"> </span><span class="s">steps.meta.outputs.REPO_NAME</span><span class="nv"> </span><span class="s">}}:latest'</span>
+         <span class="na">format</span><span class="pi">:</span> <span class="s1">'</span><span class="s">table'</span>
+         <span class="na">exit-code</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0'</span>
+         <span class="na">ignore-unfixed</span><span class="pi">:</span> <span class="kc">true</span>
+         <span class="na">vuln-type</span><span class="pi">:</span> <span class="s1">'</span><span class="s">os,library'</span>
+         <span class="na">output</span><span class="pi">:</span> <span class="s1">'</span><span class="s">image-scan.txt'</span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Code Scan</span>
+         <span class="s">uses</span><span class="err">:</span> <span class="s">aquasecurity/trivy-action@master</span>
+         <span class="s">with</span><span class="err">:</span>
+         <span class="na">scan-type</span><span class="pi">:</span> <span class="s1">'</span><span class="s">fs'</span>
+         <span class="na">ignore-unfixed</span><span class="pi">:</span> <span class="kc">true</span>
+         <span class="na">format</span><span class="pi">:</span> <span class="s1">'</span><span class="s">table'</span>
+         <span class="na">output</span><span class="pi">:</span> <span class="s1">'</span><span class="s">code-scan.txt'</span>
+         <span class="na">exit-code</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0'</span>
+     <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Create Issue</span>
+         <span class="s">env</span><span class="err">:</span>
+         <span class="na">API_TOKEN</span><span class="pi">:</span> <span class="s">${{ secrets.ORG_ISSUES_TOKEN }}</span>
+         <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+         <span class="s">ISSUE_TITLE="Security report $(date +'%d/%m/%Y')"</span>
+         <span class="s">ISSUE_CONTENT=$(cat 'image-scan.txt' 'code-scan.txt')</span>
+         <span class="s">curl -X POST -H "Authorization: token ${API_TOKEN}" -H "Content-Type: application/json" \</span>
+             <span class="s">-d "{\"title\": \"$ISSUE_TITLE\", \"body\": \"$ISSUE_CONTENT\"}" \</span>
+             <span class="s">https://gitea.host.tld/api/v1/repos/user-or-org-name/${{ steps.meta.outputs.REPO_NAME }}/issues    </span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw me-1"></i> <a href="/categories/seguridad-inform%C3%A1tica/">Seguridad Informática</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw me-1"></i> <a href="/tags/github/" class="post-tag no-text-decoration">github</a> <a href="/tags/git/" class="post-tag no-text-decoration">git</a> <a href="/tags/gitea/" class="post-tag no-text-decoration">gitea</a> <a href="/tags/cicd/" class="post-tag no-text-decoration">cicd</a>
+</div>
+<div class=" post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2 ">
+<div class="license-wrapper"> Esta publicación está bajo licencia <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> por el autor.</div>
+<div class="share-wrapper d-flex align-items-center"> <span class="share-label text-muted">Compartir</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Usando%20Trivy%20en%20Gitea%20Actions.%20Escaneo%20de%20vulnerabilidades%20con%20herramientas%20de%20c%C3%B3digo%20abierto.%20-%20Odisea%20Geek&amp;url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fusando-trivy-en-gitea-actions%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Usando%20Trivy%20en%20Gitea%20Actions.%20Escaneo%20de%20vulnerabilidades%20con%20herramientas%20de%20c%C3%B3digo%20abierto.%20-%20Odisea%20Geek&amp;u=https%3A%2F%2Fodiseageek.es%2Fposts%2Fusando-trivy-en-gitea-actions%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fusando-trivy-en-gitea-actions%2F&amp;text=Usando%20Trivy%20en%20Gitea%20Actions.%20Escaneo%20de%20vulnerabilidades%20con%20herramientas%20de%20c%C3%B3digo%20abierto.%20-%20Odisea%20Geek" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fusando-trivy-en-gitea-actions%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Linkedin" aria-label="Linkedin"> <i class="fa-fw fab fa-linkedin"></i> </a> <button id="copy-link" aria-label="Copy link" class="btn small" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar enlace" data-title-succeed="¡Enlace copiado!"> <i class="fa-fw fas fa-link pe-none fs-6"></i> </button> </span>
+</div>
+</div>
+</div></article></main><aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted"><div class="access">
+<section id="access-lastmod"><h2 class="panel-heading">Actualizado recientemente</h2>
+<ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+<li class="text-truncate lh-lg"> <a href="/posts/usando-trivy-en-gitea-actions/">Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/creando-el-blog/">Creando el blog</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/usar-discord-en-linux-sin-actualizar/">Usar Discord en Linux sin actualizar</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/modem-router-y-punto-de-acceso-en-que-se-diferencian/">Módem, router y punto de acceso. En qué se diferencian.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/proteger-headers-con-cloudflare/">Proteger las cabeceras HTTP con Cloudflare, Traefik, Apache y Nginx</a>
+</li>
+</ul></section><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section>
+</div>
+<section id="toc-wrapper" class="ps-0 pe-4"><h2 class="panel-heading ps-3 pt-2 mb-2">Contenido</h2>
+<nav id="toc"></nav></section></aside>
+</div>
+<div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+<aside id="related-posts" aria-labelledby="related-label"><h3 class="mb-4" id="related-label">Continúa leyendo</h3>
+<nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"><article class="col"> <a href="/posts/firmando-commits-con-gpg-y-yubikey/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1659372715" data-df="DD/MM/YYYY"> 01/08/2022 </time><h4 class="pt-0 my-2">Firmando commits con GPG y Yubikey</h4>
+<div class="text-muted"><p> En esta entrada no vamos a explicar cómo generar claves GPG para la Yubikey, para ello tenemos esta otra: Creando y añadiendo claves GPG a YubiKey Ya hemos visto en otras entradas el gran pote...</p></div>
+</div></a></article><article class="col"> <a href="/posts/a%C3%B1adiendo-clave-privada-yubikey-nuevo-ordenador/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1671382027" data-df="DD/MM/YYYY"> 18/12/2022 </time><h4 class="pt-0 my-2">Usando la clave privada GPG de Yubikey en un nuevo ordenador</h4>
+<div class="text-muted"><p> Supongamos que hemos seguido los pasos para crear y añadir claves GPG a YubiKey en un ordenador y nos ha ido todo bien. Las claves y subclaves privadas están almacenadas en nuestro dispositivo y po...</p></div>
+</div></a></article><article class="col"> <a href="/posts/que-es-un-raid/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1569940670" data-df="DD/MM/YYYY"> 01/10/2019 </time><h4 class="pt-0 my-2">Qué es un RAID</h4>
+<div class="text-muted"><p> Siempre pueden pasar fallos, errores mecánicos a causa del paso del tiempo o algún defecto o accidente. Si esto se produce en un disco duro podríamos llegar a perder toda la información que se guar...</p></div>
+</div></a></article></nav></aside><nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation"> <a href="/posts/proteger-headers-con-cloudflare/" class="btn btn-outline-primary" aria-label="Anterior"><p>Proteger las cabeceras HTTP con Cloudflare, Traefik, Apache y Nginx</p></a><div class="btn btn-outline-primary disabled" aria-label="Siguiente"><p>-</p></div></nav><script type="text/javascript"> (function () { const origin = 'https://giscus.app'; const iframe = 'iframe.giscus-frame'; const lightTheme = 'light'; const darkTheme = 'dark_dimmed'; let initTheme = lightTheme; const html = document.documentElement; if ( (html.hasAttribute('data-mode') && html.getAttribute('data-mode') === 'dark') || (!html.hasAttribute('data-mode') && window.matchMedia('(prefers-color-scheme: dark)').matches) ) { initTheme = darkTheme; } let giscusAttributes = { src: 'https://giscus.app/client.js', 'data-repo': 'OckhamOdyssey/OdiseaGeekGiscus', 'data-repo-id': 'R_kgDOHsKqGQ', 'data-category': 'General', 'data-category-id': 'DIC_kwDOHsKqGc4CQVil', 'data-mapping': 'pathname', 'data-reactions-enabled': '1', 'data-emit-metadata': '0', 'data-theme': initTheme, 'data-input-position': 'top', 'data-lang': 'es', 'data-loading': 'lazy', crossorigin: 'anonymous', async: '' }; let giscusScript = document.createElement('script'); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value) ); document.getElementById('tail-wrapper').appendChild(giscusScript); addEventListener('message', (event) => { if ( event.source === window && event.data && event.data.direction === ModeToggle.ID ) { /* global theme mode changed */ const mode = event.data.message; const theme = mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme; const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); })(); </script><footer aria-label="Site Info" class=" d-flex flex-column justify-content-center text-muted flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3 "><p> © <time>2023</time> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a>. <span data-bs-toggle="tooltip" data-bs-placement="top" title="Todas las publicaciones de esta página se encuentran bajo licencia Creative Commons Attribution 4.0 International (CC BY 4.0) License por el autor.">Algunos derechos reservados.</span></p>
+<p>Hecho con <img class="emoji" title=":heart:" alt=":heart:" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png" height="20" width="20"> usando <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> y <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.</p></footer>
+</div></div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-11 content">
+<div id="search-hints"><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div>
+<aside aria-label="Scroll to Top"> <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow"> <i class="fas fa-angle-up"></i> </button></aside>
+</div><div id="mask"></div><script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/es.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.3/dist/tocbot.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script defer src="/unregister.js"></script> <script> /* Note: dependent library will be loaded in `js-selector.html` */ SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<article class="px-1 px-sm-2 px-lg-4 px-xl-0"><header><h2><a href="{url}">{title}</a></h2><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div></header><p>{snippet}</p></article>', noResultsText: '<p class="mt-5"></p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>

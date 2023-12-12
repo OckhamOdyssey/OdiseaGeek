@@ -1,0 +1,174 @@
+<!doctype html><html lang="es" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><meta name="generator" content="Jekyll v4.3.2" /><meta property="og:title" content="Firmando commits con GPG y Yubikey" /><meta property="og:locale" content="es" /><meta name="description" content="En esta entrada no vamos a explicar cómo generar claves GPG para la Yubikey, para ello tenemos esta otra: Creando y añadiendo claves GPG a YubiKey" /><meta property="og:description" content="En esta entrada no vamos a explicar cómo generar claves GPG para la Yubikey, para ello tenemos esta otra: Creando y añadiendo claves GPG a YubiKey" /><link rel="canonical" href="https://odiseageek.es/posts/firmando-commits-con-gpg-y-yubikey/" /><meta property="og:url" content="https://odiseageek.es/posts/firmando-commits-con-gpg-y-yubikey/" /><meta property="og:site_name" content="Odisea Geek" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2022-08-01T18:51:55+02:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Firmando commits con GPG y Yubikey" /><meta name="twitter:site" content="@OckhamOdyssey" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-08-01T18:51:55+02:00","datePublished":"2022-08-01T18:51:55+02:00","description":"En esta entrada no vamos a explicar cómo generar claves GPG para la Yubikey, para ello tenemos esta otra: Creando y añadiendo claves GPG a YubiKey","headline":"Firmando commits con GPG y Yubikey","mainEntityOfPage":{"@type":"WebPage","@id":"https://odiseageek.es/posts/firmando-commits-con-gpg-y-yubikey/"},"url":"https://odiseageek.es/posts/firmando-commits-con-gpg-y-yubikey/"}</script><title>Firmando commits con GPG y Yubikey | Odisea Geek</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Odisea Geek"><meta name="application-name" content="Odisea Geek"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.3/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css"> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return 'mode'; } static get MODE_ATTR() { return 'data-mode'; } static get DARK_MODE() { return 'dark'; } static get LIGHT_MODE() { return 'light'; } static get ID() { return 'mode-toggle'; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia('(prefers-color-scheme: dark)'); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { document.documentElement.removeAttribute(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage( { direction: ModeToggle.ID, message: this.modeStatus }, '*' ); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body><aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end"><header class="profile-wrapper"> <a href="/" id="avatar" class="rounded-circle"> <img src="https://avatars.githubusercontent.com/u/60941836?v=4" width="112" height="112" alt="avatar" onerror="this.style.display='none'"> </a><h1 class="site-title"> <a href="/">Odisea Geek</a>
+</h1>
+<p class="site-subtitle fst-italic mb-0">Mi experiencia en el mundo de la informática.</p></header><nav class="flex-column flex-grow-1 w-100 ps-0"><ul class="nav">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home"></i> <span>INICIO</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream"></i> <span>CATEGORÍAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag"></i> <span>ETIQUETAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive"></i> <span>ARCHIVO</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle"></i> <span>SOBRE MÍ</span> </a>
+</li>
+</ul></nav><div class="sidebar-bottom d-flex flex-wrap align-items-center w-100"> <button type="button" class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/OckhamOdyssey" aria-label="github" target="_blank" rel="noopener noreferrer"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/OckhamOdyssey" aria-label="twitter" target="_blank" rel="noopener noreferrer"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20['admin','odiseageek.es'].join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a> <a href="https://www.linkedin.com/in/nicolas-sariego-75670480/" aria-label="linkedin" target="_blank" rel="noopener noreferrer"> <i class="fab fa-linkedin"></i> </a>
+</div></aside><div id="main-wrapper" class="d-flex justify-content-center">
+<div class="container d-flex flex-column px-xxl-5">
+<header id="topbar-wrapper" aria-label="Top Bar"><div id="topbar" class="d-flex align-items-center justify-content-between px-lg-3 h-100">
+<nav id="breadcrumb" aria-label="Breadcrumb"> <span> <a href="/"> Inicio </a> </span> <span>Firmando commits con GPG y Yubikey</span></nav><button type="button" id="sidebar-trigger" class="btn btn-link"> <i class="fas fa-bars fa-fw"></i> </button><div id="topbar-title"> Post</div>
+<button type="button" id="search-trigger" class="btn btn-link"> <i class="fas fa-search fa-fw"></i> </button> <search class="align-items-center ms-3 ms-lg-0"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Buscar..."> </search> <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancelar</button>
+</div></header><div class="row flex-grow-1">
+<main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4"><article class="px-1"><header><h1 data-toc-skip>Firmando commits con GPG y Yubikey</h1>
+<div class="post-meta text-muted"> <span> Publicado <time data-ts="1659372715" data-df="DD/MM/YYYY" data-bs-toggle="tooltip" data-bs-placement="bottom"> 01/08/2022 </time> </span><div class="d-flex justify-content-between"> <span> Por <em> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a> </em> </span> <span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="443 palabras"> <em>2 min</em> de lectura</span>
+</div>
+</div></header><div class="content">
+<blockquote class="prompt-info"><p>En esta entrada no vamos a explicar cómo generar claves GPG para la Yubikey, para ello tenemos esta otra: <a href="/posts/creando-y-anadiendo-claves-gpg-a-yubikey/">Creando y añadiendo claves GPG a YubiKey</a></p></blockquote>
+<p>Ya hemos visto en otras entradas el gran potencial que tienen las Yubikey. Esta ocasión va a ser algo de gran interés para aquellos desarrolladores que no paran de hacer commits en git. Vamos a usar la Yubikey para firmar todos los commits que hagamos. Según el servidor git, podremos hacer que, si no se han firmado, se marquen como “No validados”.</p>
+<h1 id="pasos-previos">Pasos previos</h1>
+<p>Partiremos por la base del anterior post y asumiremos que ya tenemos todas nuestras claves generadas y guardadas en la llave. Por lo que, al conectar la Yubikey al ordenador y ejecutar la orden <code class="language-plaintext highlighter-rouge">gpg -K</code> nos debería devolver algo parecido a lo siguiente:</p>
+<div class="language-plaintext highlighter-rouge">
+<div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td>
+<td class="rouge-code"><pre>/home/ockham/.gnupg/pubring.kbx
+-------------------------------
+sec&gt;  rsa2048 2022-03-10 [SC] [caduca: 2022-09-04]
+      B12F58499135721C09A1EEA261D4104EAD00CCE7
+uid        [  absoluta ] Ockham Odyssey &lt;admin@odiseageek.es&gt;
+ssb&gt;  rsa2048 2022-03-10 [E] [caduca: 2022-09-04]
+ssb&gt;  rsa2048 2022-03-10 [A] [caduca: 2022-09-04]
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Si no es así, se tendrá que seguir la otra entrada del blog antes de continuar.</p>
+<h1 id="configurando-git">Configurando git</h1>
+<p>Primero de todo buscaremos nuestra clave privada:</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">gpg --list-secret-keys --keyid-format=long
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Recibiremos una respuesta como la siguiente:</p>
+<div class="language-plaintext highlighter-rouge">
+<div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td>
+<td class="rouge-code"><pre>/Users/ockham/.gnupg/secring.gpg
+------------------------------------
+sec&gt;   4096R/3AA5C34371567BD2 2022-03-08 [SC] [caduca: 2022-09-04]
+       Número de serie de la tarjeta = 0006 16752384
+uid               [  absoluta ] Ockham Odyssey &lt;admin@odiseageek.es&gt;
+ssb&gt;   4096R/42B317FD4BA89E7A 2022-03-08 [A] [caduca: 2022-09-04]
+ssb&gt;   4096R/44BF8217A52AF753 2022-03-08 [E] [caduca: 2022-09-04]
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Como buscamos firmar, seleccionaremos la primera clave (<code class="language-plaintext highlighter-rouge">3AA5C34371567BD2</code>) y ejecutaremos el siguiente comando para indicar a git que esa será nuestra clave de firma:</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">git config --global user.signingkey 3AA5C34371567BD2
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Ahora configuraremos git para que firme todos los commits por defecto:</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">git config --global commit.gpgsign true
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Y ya está. Ahora, a la hora de hacer un commit, según hayamos configurado la tarjeta, nos solicitará ciertos pasos. Si hemos seguido el orden del posts anterior, primero tendremos que dar la contraseña de la Yubikey para firmar y luego tendremos que pulsarla. El comando git se mantendrá a la espera de estos pasos para comenzar a firmar.</p>
+<h1 id="configurando-github">Configurando GitHub</h1>
+<p>Si queremos que GitHub tenga en cuenta nuestras firmas tendremos que ir a la <a href="https://github.com/settings/keys">configuración de claves SSH y GPG</a>. Pegaremos la clave pública que podemos obtener tras ejecutar <code class="language-plaintext highlighter-rouge">gpg --armor--export 3AA5C34371567BD2</code>.</p>
+<h1 id="comprobación">Comprobación</h1>
+<p>Una vez hayamos hecho un commit (podemos hacerlo sin el <code class="language-plaintext highlighter-rouge">-S</code> para firmar si hemos configurado que firme por defecto) podremos verificar que se ha firmado correctamente ejecutando la siguiente orden:</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">git show HEAD --show-signature
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Tras hacer un push en GitHub, también podremos comprobar que reconoce la firma y marca el commit como verificado.</p>
+<p><a href="/assets/2022/08/git-gpg-sign.png" class="popup img-link shimmer"><img src="/assets/2022/08/git-gpg-sign.png" alt="GitHub marcando el commit como verificado" loading="lazy"></a></p>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw me-1"></i> <a href="/categories/miscel%C3%A1neo/">Misceláneo</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw me-1"></i> <a href="/tags/gpg/" class="post-tag no-text-decoration">gpg</a> <a href="/tags/linux/" class="post-tag no-text-decoration">linux</a> <a href="/tags/pgp/" class="post-tag no-text-decoration">pgp</a> <a href="/tags/yubico/" class="post-tag no-text-decoration">yubico</a> <a href="/tags/yubikey/" class="post-tag no-text-decoration">yubikey</a> <a href="/tags/git/" class="post-tag no-text-decoration">git</a> <a href="/tags/github/" class="post-tag no-text-decoration">github</a>
+</div>
+<div class=" post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2 ">
+<div class="license-wrapper"> Esta publicación está bajo licencia <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> por el autor.</div>
+<div class="share-wrapper d-flex align-items-center"> <span class="share-label text-muted">Compartir</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Firmando%20commits%20con%20GPG%20y%20Yubikey%20-%20Odisea%20Geek&amp;url=https%3A%2F%2Fodiseageek.es%2Fposts%2Ffirmando-commits-con-gpg-y-yubikey%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Firmando%20commits%20con%20GPG%20y%20Yubikey%20-%20Odisea%20Geek&amp;u=https%3A%2F%2Fodiseageek.es%2Fposts%2Ffirmando-commits-con-gpg-y-yubikey%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Ffirmando-commits-con-gpg-y-yubikey%2F&amp;text=Firmando%20commits%20con%20GPG%20y%20Yubikey%20-%20Odisea%20Geek" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Ffirmando-commits-con-gpg-y-yubikey%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Linkedin" aria-label="Linkedin"> <i class="fa-fw fab fa-linkedin"></i> </a> <button id="copy-link" aria-label="Copy link" class="btn small" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar enlace" data-title-succeed="¡Enlace copiado!"> <i class="fa-fw fas fa-link pe-none fs-6"></i> </button> </span>
+</div>
+</div>
+</div></article></main><aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted"><div class="access">
+<section id="access-lastmod"><h2 class="panel-heading">Actualizado recientemente</h2>
+<ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+<li class="text-truncate lh-lg"> <a href="/posts/usando-trivy-en-gitea-actions/">Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/creando-el-blog/">Creando el blog</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/usar-discord-en-linux-sin-actualizar/">Usar Discord en Linux sin actualizar</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/modem-router-y-punto-de-acceso-en-que-se-diferencian/">Módem, router y punto de acceso. En qué se diferencian.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/proteger-headers-con-cloudflare/">Proteger las cabeceras HTTP con Cloudflare, Traefik, Apache y Nginx</a>
+</li>
+</ul></section><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section>
+</div></aside>
+</div>
+<div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+<aside id="related-posts" aria-labelledby="related-label"><h3 class="mb-4" id="related-label">Continúa leyendo</h3>
+<nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"><article class="col"> <a href="/posts/a%C3%B1adiendo-clave-privada-yubikey-nuevo-ordenador/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1671382027" data-df="DD/MM/YYYY"> 18/12/2022 </time><h4 class="pt-0 my-2">Usando la clave privada GPG de Yubikey en un nuevo ordenador</h4>
+<div class="text-muted"><p> Supongamos que hemos seguido los pasos para crear y añadir claves GPG a YubiKey en un ordenador y nos ha ido todo bien. Las claves y subclaves privadas están almacenadas en nuestro dispositivo y po...</p></div>
+</div></a></article><article class="col"> <a href="/posts/creando-y-anadiendo-claves-gpg-a-yubikey/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1647002373" data-df="DD/MM/YYYY"> 11/03/2022 </time><h4 class="pt-0 my-2">Creando y añadiendo claves GPG a YubiKey</h4>
+<div class="text-muted"><p> En esta publicación no vamos a entrar en detalles sobre qué es una YubiKey o una clave GPG, ni qué usos tienen, vamos a ir directos al grano. Pero explicando todos los procesos y lo que aparece en ...</p></div>
+</div></a></article><article class="col"> <a href="/posts/usando-trivy-en-gitea-actions/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1702395060" data-df="DD/MM/YYYY"> 12/12/2023 </time><h4 class="pt-0 my-2">Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.</h4>
+<div class="text-muted"><p> Esta entrada cuenta con un TL;DR Voy a explicar como implementar Trivy en el CI/CD de Gitea. Si no sabes muy bien alguno de esos puntos lo explicaré a continuación, si no, puedes bajar directa...</p></div>
+</div></a></article></nav></aside><nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation"> <a href="/posts/software-libre-para-mejorar-en-el-estudio/" class="btn btn-outline-primary" aria-label="Anterior"><p>Software libre para mejorar en el estudio</p></a> <a href="/posts/usar-discord-en-linux-sin-actualizar/" class="btn btn-outline-primary" aria-label="Siguiente"><p>Usar Discord en Linux sin actualizar</p></a></nav><script type="text/javascript"> (function () { const origin = 'https://giscus.app'; const iframe = 'iframe.giscus-frame'; const lightTheme = 'light'; const darkTheme = 'dark_dimmed'; let initTheme = lightTheme; const html = document.documentElement; if ( (html.hasAttribute('data-mode') && html.getAttribute('data-mode') === 'dark') || (!html.hasAttribute('data-mode') && window.matchMedia('(prefers-color-scheme: dark)').matches) ) { initTheme = darkTheme; } let giscusAttributes = { src: 'https://giscus.app/client.js', 'data-repo': 'OckhamOdyssey/OdiseaGeekGiscus', 'data-repo-id': 'R_kgDOHsKqGQ', 'data-category': 'General', 'data-category-id': 'DIC_kwDOHsKqGc4CQVil', 'data-mapping': 'pathname', 'data-reactions-enabled': '1', 'data-emit-metadata': '0', 'data-theme': initTheme, 'data-input-position': 'top', 'data-lang': 'es', 'data-loading': 'lazy', crossorigin: 'anonymous', async: '' }; let giscusScript = document.createElement('script'); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value) ); document.getElementById('tail-wrapper').appendChild(giscusScript); addEventListener('message', (event) => { if ( event.source === window && event.data && event.data.direction === ModeToggle.ID ) { /* global theme mode changed */ const mode = event.data.message; const theme = mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme; const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); })(); </script><footer aria-label="Site Info" class=" d-flex flex-column justify-content-center text-muted flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3 "><p> © <time>2023</time> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a>. <span data-bs-toggle="tooltip" data-bs-placement="top" title="Todas las publicaciones de esta página se encuentran bajo licencia Creative Commons Attribution 4.0 International (CC BY 4.0) License por el autor.">Algunos derechos reservados.</span></p>
+<p>Hecho con <img class="emoji" title=":heart:" alt=":heart:" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png" height="20" width="20"> usando <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> y <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.</p></footer>
+</div></div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-11 content">
+<div id="search-hints"><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div>
+<aside aria-label="Scroll to Top"> <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow"> <i class="fas fa-angle-up"></i> </button></aside>
+</div><div id="mask"></div><script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/es.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script defer src="/unregister.js"></script> <script> /* Note: dependent library will be loaded in `js-selector.html` */ SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<article class="px-1 px-sm-2 px-lg-4 px-xl-0"><header><h2><a href="{url}">{title}</a></h2><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div></header><p>{snippet}</p></article>', noResultsText: '<p class="mt-5"></p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>

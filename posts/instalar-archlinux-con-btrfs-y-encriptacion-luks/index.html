@@ -1,0 +1,620 @@
+<!doctype html><html lang="es" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><meta name="generator" content="Jekyll v4.3.2" /><meta property="og:title" content="Instalar ArchLinux con BTRFS y encriptación LUKS" /><meta property="og:locale" content="es" /><meta name="description" content="Tras varios meses usando Manjaro como sistema principal, viendo la comodidad que me aporta y los pocos problemas que he tenido (comparado con los que me dio Ubuntu), he decidido dar el paso de migrar a Arch Linux. Pero he decidido hacerlo a lo grande, y me veo ya capaz de instalar Arch Linux con el sistema BTRFS y encriptación LUKS en dos particiones distintas. No es moco de pavo, lo sé, por eso antes de aventurarme a lo loco he decidido documentarme, hacer una planificación y probar en un equipo externo. Tras lograrlo, he documentado los pasos por secciones. Es probable que no todo se deba realizar al pie de la letra para funcionar en otros equipos, es cuestión de entender las cosas y adaptarlas a las necesidades de cada uno. Dicho esto, empezamos." /><meta property="og:description" content="Tras varios meses usando Manjaro como sistema principal, viendo la comodidad que me aporta y los pocos problemas que he tenido (comparado con los que me dio Ubuntu), he decidido dar el paso de migrar a Arch Linux. Pero he decidido hacerlo a lo grande, y me veo ya capaz de instalar Arch Linux con el sistema BTRFS y encriptación LUKS en dos particiones distintas. No es moco de pavo, lo sé, por eso antes de aventurarme a lo loco he decidido documentarme, hacer una planificación y probar en un equipo externo. Tras lograrlo, he documentado los pasos por secciones. Es probable que no todo se deba realizar al pie de la letra para funcionar en otros equipos, es cuestión de entender las cosas y adaptarlas a las necesidades de cada uno. Dicho esto, empezamos." /><link rel="canonical" href="https://odiseageek.es/posts/instalar-archlinux-con-btrfs-y-encriptacion-luks/" /><meta property="og:url" content="https://odiseageek.es/posts/instalar-archlinux-con-btrfs-y-encriptacion-luks/" /><meta property="og:site_name" content="Odisea Geek" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-07-08T20:49:18+02:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Instalar ArchLinux con BTRFS y encriptación LUKS" /><meta name="twitter:site" content="@OckhamOdyssey" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-19T19:28:38+02:00","datePublished":"2021-07-08T20:49:18+02:00","description":"Tras varios meses usando Manjaro como sistema principal, viendo la comodidad que me aporta y los pocos problemas que he tenido (comparado con los que me dio Ubuntu), he decidido dar el paso de migrar a Arch Linux. Pero he decidido hacerlo a lo grande, y me veo ya capaz de instalar Arch Linux con el sistema BTRFS y encriptación LUKS en dos particiones distintas. No es moco de pavo, lo sé, por eso antes de aventurarme a lo loco he decidido documentarme, hacer una planificación y probar en un equipo externo. Tras lograrlo, he documentado los pasos por secciones. Es probable que no todo se deba realizar al pie de la letra para funcionar en otros equipos, es cuestión de entender las cosas y adaptarlas a las necesidades de cada uno. Dicho esto, empezamos.","headline":"Instalar ArchLinux con BTRFS y encriptación LUKS","mainEntityOfPage":{"@type":"WebPage","@id":"https://odiseageek.es/posts/instalar-archlinux-con-btrfs-y-encriptacion-luks/"},"url":"https://odiseageek.es/posts/instalar-archlinux-con-btrfs-y-encriptacion-luks/"}</script><title>Instalar ArchLinux con BTRFS y encriptación LUKS | Odisea Geek</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Odisea Geek"><meta name="application-name" content="Odisea Geek"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.3/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css"> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return 'mode'; } static get MODE_ATTR() { return 'data-mode'; } static get DARK_MODE() { return 'dark'; } static get LIGHT_MODE() { return 'light'; } static get ID() { return 'mode-toggle'; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia('(prefers-color-scheme: dark)'); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { document.documentElement.removeAttribute(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage( { direction: ModeToggle.ID, message: this.modeStatus }, '*' ); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body><aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end"><header class="profile-wrapper"> <a href="/" id="avatar" class="rounded-circle"> <img src="https://avatars.githubusercontent.com/u/60941836?v=4" width="112" height="112" alt="avatar" onerror="this.style.display='none'"> </a><h1 class="site-title"> <a href="/">Odisea Geek</a>
+</h1>
+<p class="site-subtitle fst-italic mb-0">Mi experiencia en el mundo de la informática.</p></header><nav class="flex-column flex-grow-1 w-100 ps-0"><ul class="nav">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home"></i> <span>INICIO</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream"></i> <span>CATEGORÍAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag"></i> <span>ETIQUETAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive"></i> <span>ARCHIVO</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle"></i> <span>SOBRE MÍ</span> </a>
+</li>
+</ul></nav><div class="sidebar-bottom d-flex flex-wrap align-items-center w-100"> <button type="button" class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/OckhamOdyssey" aria-label="github" target="_blank" rel="noopener noreferrer"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/OckhamOdyssey" aria-label="twitter" target="_blank" rel="noopener noreferrer"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20['admin','odiseageek.es'].join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a> <a href="https://www.linkedin.com/in/nicolas-sariego-75670480/" aria-label="linkedin" target="_blank" rel="noopener noreferrer"> <i class="fab fa-linkedin"></i> </a>
+</div></aside><div id="main-wrapper" class="d-flex justify-content-center">
+<div class="container d-flex flex-column px-xxl-5">
+<header id="topbar-wrapper" aria-label="Top Bar"><div id="topbar" class="d-flex align-items-center justify-content-between px-lg-3 h-100">
+<nav id="breadcrumb" aria-label="Breadcrumb"> <span> <a href="/"> Inicio </a> </span> <span>Instalar ArchLinux con BTRFS y encriptación LUKS</span></nav><button type="button" id="sidebar-trigger" class="btn btn-link"> <i class="fas fa-bars fa-fw"></i> </button><div id="topbar-title"> Post</div>
+<button type="button" id="search-trigger" class="btn btn-link"> <i class="fas fa-search fa-fw"></i> </button> <search class="align-items-center ms-3 ms-lg-0"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Buscar..."> </search> <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancelar</button>
+</div></header><div class="row flex-grow-1">
+<main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4"><article class="px-1"><header><h1 data-toc-skip>Instalar ArchLinux con BTRFS y encriptación LUKS</h1>
+<div class="post-meta text-muted"> <span> Publicado <time data-ts="1625770158" data-df="DD/MM/YYYY" data-bs-toggle="tooltip" data-bs-placement="bottom"> 08/07/2021 </time> </span> <span> Actualizado <time data-ts="1663608518" data-df="DD/MM/YYYY" data-bs-toggle="tooltip" data-bs-placement="bottom"> 19/09/2022 </time> </span><div class="d-flex justify-content-between"> <span> Por <em> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a> </em> </span> <span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="2588 palabras"> <em>14 min</em> de lectura</span>
+</div>
+</div></header><div class="content">
+<p>Tras varios meses usando Manjaro como sistema principal, viendo la comodidad que me aporta y los pocos problemas que he tenido (comparado con los que me dio Ubuntu), he decidido dar el paso de migrar a Arch Linux. Pero he decidido hacerlo a lo grande, y me veo ya capaz de<strong> instalar Arch Linux con el sistema BTRFS y encriptación LUKS en dos particiones distintas</strong>. No es moco de pavo, lo sé, por eso antes de aventurarme a lo loco he decidido documentarme, hacer una planificación y probar en un equipo externo. Tras lograrlo, he documentado los pasos por secciones. Es probable que no todo se deba realizar al pie de la letra para funcionar en otros equipos, es cuestión de entender las cosas y adaptarlas a las necesidades de cada uno. Dicho esto, empezamos.</p>
+<h2 id="descarga-e-instalación-del-archivo-iso">
+<span class="me-2">Descarga e instalación del archivo ISO</span><a href="#descarga-e-instalaci%C3%B3n-del-archivo-iso" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Como siempre, debemos acceder a la página oficial de Arch Linux para descargar el archivo ISO actualizado. A diferencia de los sistemas operativos por versiones, las ISO desactualizadas no funcionarán. Para ello, habrá que acudir a la <a href="https://archlinux.org/download/" target="_blank">sección de descargas</a> y navegar hasta el apartado <strong>HTTP Direct Downloads</strong>, donde buscaremos nuestro país o uno cercano y descargaremos la ISO desde allí. Si se vive en España recomiendo descargarlo desde el repositorio <strong>rediris</strong> o <strong>cloroformo</strong>, pero tengo constancia que en México pueden haber errores y es mejor descargar la versión de Estados Unidos.</p>
+<p>Ahora hay que quemar la imagen ISO en un USB vacío que tengamos. Para ello podemos usar el programa Rufus si trabajamos desde Windows o BalenaEtcher si estamos en GNU/Linux. Hay un poco más de información en<a href="https://www.odiseageek.es/instalar-un-sistema-operativo-a-la-raspberry/#Como_instalar_el_sistema_operativo"> la siguiente entrada</a>.</p>
+<h2 id="ajustar-el-idioma-del-teclado">
+<span class="me-2">Ajustar el idioma del teclado</span><a href="#ajustar-el-idioma-del-teclado" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Antes de ponernos a tocar nada, debemos consultar unos datos y realizar algunas planificaciones, para ello tendremos que escribir algunos comandos. Por defecto, el teclado de Arch Linux está en inglés, así que cambiaremos el idioma a español para facilitarnos las cosas.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">loadkeys es
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="planificar-las-particiones">
+<span class="me-2">Planificar las particiones</span><a href="#planificar-las-particiones" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Lo primero que tenemos que hacer es saber cuantos discos tenemos, cómo se llaman y si estamos usando una BIOS en modo UEFI o Legacy.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">lsblk
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Y, para este ejercicio, supondremos que tenemos un disco sda con 120GB y un sdb de 1TB. El primero, sabiendo que es un SSD, lo usaremos para instalar el sistema operativo, el segundo será la partición <code class="language-plaintext highlighter-rouge">/home</code>. Ambas encriptadas.</p>
+<p>Ahora aparece un problema, si el directorio raíz está encriptado es posible que tengamos problemas a la hora de iniciar el sistema, así que tendremos que separar el o los directorios de arranque para que no se encripten.</p>
+<p>Para saber qué directorios de arranque tendremos que tener, hay que saber si nuestro ordenador funciona con <a href="/posts/el-arranque-del-sistema-medidas-de-seguridad-y-el-grub/">BIOS o UEFI</a>.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">ls /sys/firmware/efi/efivars
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Si este comando nos da error, significa que estamos en BIOS/Legacy, si no devuelve error estamos en UEFI.</p>
+<p>Si estamos en <strong>BIOS</strong>, todas nuestras particiones deben ser MBR, también llamado DOS. Este tipo de particionado solo permite un total de 4 particiones, que se pueden dividir entre primarias y lógicas. Pero todo eso se especificará en otra entrada.</p>
+<p>Si estamos en <strong>UEFI</strong>, las particiones pueden ser tanto MBR como GPT, aunque es más recomendable la segunda, ya que da menos problemas y permite particiones casi ilimitadas, sin diferenciar entre primarias y secundarias. En nuestro caso estamos en modo UEFI, por lo que a partir de ahora nos centraremos en hacer las particiones para este sistema, todo lo demás puede hacerse igual. Esta es la planificación de nuestro particionado.</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th><strong>Disco y partición</strong></th>
+<th><strong>Tamaño</strong></th>
+<th><strong>Tipo</strong></th>
+<th><strong>Formato</strong></th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code class="language-plaintext highlighter-rouge">sda1</code></td>
+<td>260MiB</td>
+<td>EFI System</td>
+<td>FAT32</td>
+</tr>
+<tr>
+<td><code class="language-plaintext highlighter-rouge">sda2</code></td>
+<td>512MiB</td>
+<td>Linux filesystem</td>
+<td>EXT4</td>
+</tr>
+<tr>
+<td><code class="language-plaintext highlighter-rouge">sda3</code></td>
+<td>Todo</td>
+<td>Linux filesystem</td>
+<td>LUKS</td>
+</tr>
+<tr>
+<td><code class="language-plaintext highlighter-rouge">sdb1</code></td>
+<td>Todo</td>
+<td>Linux filesystem</td>
+<td>LUKS</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="particionado-de-discos">
+<span class="me-2">Particionado de discos</span><a href="#particionado-de-discos" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Usaremos la herramienta fdisk para modificar el primer disco</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">fdisk /dev/sda
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Seleccionaremos la opción <strong>g</strong> para usar una tabla de partición GPT, luego con la <strong>n</strong> crearemos la primera partición.</p>
+<p><a href="/assets/2021/07/PyTamK7.png" class="popup img-link shimmer"><img src="/assets/2021/07/PyTamK7.png" alt="" loading="lazy"></a></p>
+<p>La primera opción es el número de la partición, nos aparece el 1 como opción por defecto así que damos a Enter. Luego nos indica cual será el primer sector y le damos a Enter para seleccionar también la opción por defecto. Después, nos pregunta cuanto medirá la partición, aquí tenemos que poner siempre un + seguido del número y M o G. En este caso seleccionamos 260MiB.</p>
+<p>Ahora, con la opción <strong>t</strong> editaremos el tipo de partición, si tenemos más de una nos preguntará cual queremos editar. Si no sabemos el código del tipo de partición que queremos podemos pulsar <strong>L</strong> para ver la lista de posibilidades. En nuestro caso queremos una partición EFI, cuyo código es el <strong>1</strong>. Para las otras tres particiones el tipo de particionado no hace falta modificarlos.</p>
+<p>Realizamos los mismos pasos para la partición 2 y 3 del disco sda y la única partición de sdb.</p>
+<h2 id="formateo-de-particiones">
+<span class="me-2">Formateo de particiones</span><a href="#formateo-de-particiones" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Una vez tenemos las cuatro particiones es hora de darles el formato que queramos. Para ellos tenemos la herramienta <strong>mkfs</strong>, abreviación en inglés de “Dar sistema de formato”. Como podemos ver en la tabla de arriba la primera y segunda partición son FAT32 y EXT4 respectivamente, simple. Las otras dos particiones aparece como formato LUKS, esto en realidad no es un formato de por sí, sino el método de encriptación, y se hace con el comando <strong>cryptsetup</strong>.</p>
+<p>Primero vamos a dar un formato FAT32 a la partición EFI, para eso ejecutamos este comando.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mkfs.fat -F32 /dev/sda1
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Ahora daremos formato EXT4 a la partición boot. Con la opción <strong>-L</strong> añadimos lo que se llama labbel, que viene siendo una etiqueta, no es más que algo orientativo.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mkfs.ext4 -L boot /dev/sda2
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Ahora solo nos quedan las dos particiones encriptadas. Para esto, primero debemos cargar en el kernel los módulos de encriptación. Son solo dos comandos.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="go">modprobe dm-crypt
+modprobe dm-mod
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Tras esto, ciframos con LUKS las particiones sda3 y sdb1. Para confirmar, nos pedirá escribir YES en mayúsculas y luego la contraseña con la que vamos a encriptar los discos.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="go">cryptsetup luksFormat -v -s 512 -h sha512 /dev/sda3
+cryptsetup luksFormat -v -s 512 -h sha512 /dev/sdb1
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="desbloquear-particiones-encriptadas">
+<span class="me-2">Desbloquear particiones encriptadas</span><a href="#desbloquear-particiones-encriptadas" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Debemos tener en cuenta que para poder utilizar las particiones encriptadas debemos desbloquearlas primero, eso hará que tengamos por un lado las particiones encriptadas “sdX”, y las particiones desencriptadas en mapper. Un ejemplo hará que lo entendamos mejor.</p>
+<p>Una partición encriptada se almacena en /dev/sda3, cuando la desencriptemos esta seguirá existiendo pero el acceso desencriptado se encontrará en /dev/mapper/foo, siendo foo una palabra clave que nosotros elegiremos. Para no complicarnos la vida haremos que la palabra clave de la partición sda3 sea “root” y la de sdb1 sea “home”.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="go">cryptsetup open /dev/sda3 root
+cryptsetup open /dev/sdb1 home
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Tras poner un comando nos solicitará la contraseña de desencriptado que anteriormente le hemos puesto.</p>
+<p>Ahora podremos por fin formatear las particiones ahora desencriptadas, volveremos a usar la herramienta <strong>mkfs</strong> pero en las particiones mapper.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mkfs.btrfs -L root /dev/mapper/root
+mkfs.btrfs -L home /dev/mapper/home
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="subvolúmenes-btrfs">
+<span class="me-2">Subvolúmenes BTRFS</span><a href="#subvol%C3%BAmenes-btrfs" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>A parte de el soporte nativo de comprimirse a si mismo o la posibilidad de montarse mediante un <a href="https://www.odiseageek.es/que-es-un-raid/">RAID</a>, el sistema de ficheros BTRFS también permite crear subvolúmenes. Un subvolumen es un árbol de archivos independiente en un sistema de ficheros que se monta dentro de directorio y puede poseer propiedades independientes. Para no petarnos la cabeza diremos que es una partición dentro de otra partición, no es realmente eso pero aquí nos servirá.</p>
+<p>Los subvolúmenes facilitan bastante la administración de los discos, por lo que vamos a utilizarlos en nuestro nuevo sistema. Para ello crearemos dos subvolúmenes dentro del mapper root, uno para el propio directorio raiz y otro como partición de las copias de seguridad del sistema. El mapper home tendrá también un subvolumen propio.</p>
+<p>Para ello primero debemos montar de forma temporal el mapper root, indicando que es una partición btrfs, y acceder al propio directorio.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="gp">mount -t btrfs /dev/mapper/root /mnt;</span><span class="w"> </span><span class="nb">cd</span> /mnt
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Ahora podemos crear los dos subvolúmenes.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="go">btrfs subvolume create root
+btrfs subvolume create snapshots
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Salimos del directorio, desmontamos la partición, montamos la home y creamos su subvolumen</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td>
+<td class="rouge-code"><pre><span class="go">cd /
+umount /mnt
+mount -t btrfs /dev/mapper/home /mnt
+cd /mnt
+btrfs subvolume create home
+cd /
+umount /mnt
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="montaje-de-las-particiones">
+<span class="me-2">Montaje de las particiones</span><a href="#montaje-de-las-particiones" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Ahora que hemos preparado todas las particiones y los subvolúmenes toca montarlos poco a poco. Hay que tener en cuenta que algunos puntos de montaje están dentro de otros, por lo que habrá que crear primero los directorios de montaje. Este es el orden que hay que seguir para montar las unidades.</p>
+<p>Primero montamos el subvolumen root en el que será el directorio raiz, ahora /mnt.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mount -t btrfs -o subvol=root /dev/mapper/root /mnt
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Creamos los directorios para el arranque del sistema.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mkdir /mnt/boot
+mkdir /mnt/efi
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Montamos los directorios teniendo en cuenta la tabla del principio.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mount /dev/sda2 /mnt/boot
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mount /dev/sda1 /mnt/efi
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Creamos y montamos el resto de particiones.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mkdir /mnt/snapshots
+mkdir /mnt/home
+mount -t btrfs -o subvol=snapshots /dev/mapper/root /mnt/snapshots
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="instalación-de-paquetes-básicos">
+<span class="me-2">Instalación de paquetes básicos</span><a href="#instalaci%C3%B3n-de-paquetes-b%C3%A1sicos" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Ya tenemos todos los discos particionados, formateados y en su sitio, es hora del plato principal: instalar Arch junto con los paquetes base para su funcionamiento. El procedimiento es más simple de lo que parece, se hace con un solo comando pero puede tardar algo de tiempo dependiendo del ordenador que tengamos.</p>
+<p>En este punto es importante añadir todos los paquetes que queramos instalar, esto incluye controladores, editores, gestores de red, Wi-Fi… Si uno se olvida siempre puede instalarlo más adelante pero puede ser más complicado.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">pacstrap -i /mnt base base-devel linux linux-firmware efibootmgr grub nano btrfs-progs
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Con todo ya instalado, se habrá creado todo el árbol de directorios de un sistema GNU/Linux dentro de /mnt, pero el fstab estará sin modificar o vacío, por lo que tendremos que crearlo. Por suerte, contamos una herramienta para ayudarnos con ello, un comando que muestra toda la configuración de los puntos de montaje.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="gp">genfstab -U /mnt &gt;</span><span class="w"> </span>/mnt/etc/fstab
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Aún no tenemos nuestro sistema preparado para usar, pero sí está listo para saltar a él y empezar con las configuraciones iniciales.</p>
+<h2 id="configuraciones-básicas">
+<span class="me-2">Configuraciones básicas</span><a href="#configuraciones-b%C3%A1sicas" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Estos pasos no os los debéis saltar, son totalmente necesarios para que el sistema arranque siquiera. Primero “saltaremos” al nuevo sistema para poder realizar las instalaciones.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">arch-chroot /mnt
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Ahora somos el usuario root de nuestro nuevo sistema, pero funcionando bajo el soporte del instalador. Aun así, todos los cambios que realicemos ahora se implementarán en el nuevo sistema. No sé si es la mejor comparativa pero digamos que es como realizar reparaciones a un barco en dique seco.</p>
+<h3 id="añadir-contraseña">
+<span class="me-2">Añadir contraseña</span><a href="#a%C3%B1adir-contrase%C3%B1a" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Lo primero que vamos a hacer es darle una contraseña al usuario root.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">passwd
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h3 id="cambiar-idioma-del-sistema">
+<span class="me-2">Cambiar idioma del sistema</span><a href="#cambiar-idioma-del-sistema" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Ahora pondremos el idioma en español. Para eso entramos en el fichero <strong>/etc/locale.gen</strong> y vamos bajando hasta encontrar la versión UTF-8 de tu idioma regional. Si eres de España probablemente te interese es_ES.UTF-8.</p>
+<p>Cuando encuentres tu idioma elimina la almohadilla de esa línea. Puedes hacerlo con todos los idiomas que quieras.</p>
+<p>Ahora aplicaremos los cambios.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">locale-gen
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Lo siguiente es configurar la hora local. Para ello haremos un enlace simbólico a la hora de nuestra región. Al ser de España, seleccionaré la hora de Madrid, pero puedes seleccionar cualquier otra región del mundo cambiando de ciudad y continente.</p>
+<h3 id="establecer-horario">
+<span class="me-2">Establecer horario</span><a href="#establecer-horario" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">ln -sf /usr/share/zoneinfo/Europe/Madrid /etc/localtime
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Actualizamos el reloj físico del ordenador a la nueva hora del sistema.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">hwclock --systohc --utc
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h3 id="nombre-del-equipo">
+<span class="me-2">Nombre del equipo</span><a href="#nombre-del-equipo" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Es muy importante darle un nombre al equipo, esto nos ayudará a identificarlo en la red. Para cambiar el nombre del equipo hay que modificar dos ficheros. El nombre puede ser el que sea (sin espacios ni caracteres especiales), yo llamaré a mi equipo “arch”, deberás realizar los mismos pasos sustituyendo “arch” por el nombre del equipo que tu quieras.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="gp">echo arch &gt;</span><span class="w"> </span>/etc/hostname
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>El siguiente archivo lo tendremos que modificar a mano, tendrá que quedar más o menos así</p>
+<p><a href="/assets/2021/07/0eJHSk3.png" class="popup img-link shimmer"><img src="/assets/2021/07/0eJHSk3.png" alt="" loading="lazy"></a>”</p>
+<h3 id="modificar-el-arranque">
+<span class="me-2">Modificar el arranque</span><a href="#modificar-el-arranque" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Vale, por el título puede dar miedo, pero solo tendremos que modificar un archivo, el que le indica al GRUB cómo debe comportarse.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">nano /etc/default/grub
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Dentro de este archivo tendremos que cambiar el GRUB_CMDLINE_LINUX indicando que debe desencriptar la partición donde se encuentra el directorio raiz, seguido del nombre del mapper quedando de esta forma: <code>GRUB_CMDLINE_LINUX="cryptdevice=/dev/sda3:root"</code>.</p>
+<p>Ahora modificaremos también el script de configuración para la creación del <a href="https://es.wikipedia.org/wiki/Initrd" target="_blank">initrd</a>, básicamente para la creación del núcleo de arranque.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">nano /etc/mkinitcpio.conf
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Dentro de este fichero buscaremos el primer “HOOKS” que no esté comentado con una almohadilla y lo modificaremos haciendo que quede de la siguiente forma: <code>HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystem fsck)</code>.</p>
+<p>Una vez modificado, ejecutaremos el script para crear el núcleo de arranque Linux.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">mkinitcpio -P
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h3 id="desencriptar-home-al-arranque">
+<span class="me-2">Desencriptar home al arranque</span><a href="#desencriptar-home-al-arranque" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Como hemos podido observar en el punto anterior, solo hemos indicado que se debe desencriptar el directorio raíz. Para marcar que se debe desencriptar el disco sdb1 debemos modificar el archivo crypttab</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">nano /etc/crypttab
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Quitaremos la almohadilla de la línea home, cambiaremos la sección “device” por nuestro disco (/dev/sda3) y eliminaremos la línea de password.</p>
+<p>Esto hará que nos solicite dos contraseñas al arranque, una para la raíz y otra para el home. Si no queremos que nos solicite la contraseña para el home tendremos que crear un archivo con la contraseña, <a href="https://www.odiseageek.es/gestion-de-permisos-en-linux-cuales-son-y-como-interpretarlos/">cambiar los permisos</a> para que solo pueda leerlo el root y añadir la ubicación en la sección “password”.</p>
+<h3 id="instalar-gestor-de-red">
+<span class="me-2">Instalar gestor de red</span><a href="#instalar-gestor-de-red" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Por último pero no por ello menos importante debemos instalar algún sistema gestor de redes, esto sirve para poder detectar las redes WiFi o configurar las conexiones Ethernet. Es importante instalar únicamente un gestor de redes, porque podría causar conflicto. En este caso instalaremos NetworkManager, uno de los más extendidos.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">pacman -S networkmanager
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Ahora debemos indicarle al sistema que lo inicie cada vez que se arranca el sistema. Es importane escribir las mayúsculas donde toca para que funcione.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">systemctl enable NetworkManager
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Si mal no recuerdo, al conectar un cable de red la conexión es automática, pero para conectarse a una red WiFi desde la línea de comandos seguimos estos pasos: primero escaneamos en busca de todas las redes disponibles.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">nmcli device wifi list
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Después nos conectamos a la red que queramos de la siguiente forma.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">nmcli device wifi connect "red_wifi" password "contraseña"
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Sustituimos “red_wifi” por el nombre de la red y “contraseña” por la contraseña de la red, fácil y para toda la familia.</p>
+<h2 id="configurar-grub">
+<span class="me-2">Configurar GRUB</span><a href="#configurar-grub" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Ahora toca el último paso y uno de los más delicados. Dependiendo de cómo se haya instalado el sistema, la ubicación de las particiones y si el ordenador es UEFI o BIOS se tendrá que ejecutar de una forma u otra. Tal y como lo hemos hecho aquí, tenemos que hacer lo siguiente.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="go">grub-install --boot-directory=/boot --efi-directory=/efi /dev/sda2
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>De esta forma, indicamos dónde está el directorio boot y el directorio efi para que el grub cree las carpetas que necesite dentro de estos. Si todo ha ido bien, dentro de /efi el sistema habrá creado otra carpeta EFI y dentro el nombre de nuestro sistema. Ahora toca plasmar la configuración del grub a ambos directorios de arranque.</p>
+<div class="language-terminal highlighter-rouge">
+<div class="code-header"> <span data-label-text="Terminal"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="¡Copiado!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="go">grub-mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /efi/EFI/arch/grub.cfg
+</span></pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>Una vez esto termine, podremos apagar el ordenador, quitar el USB de instalación y volver a encenderlo. Si todo ha ido correctamente tendrá que salir el GRUB con Arch Linux como opción de arranque y, una vez haya iniciado, solicitará la contraseña de las particiones encriptadas antes de arrancar definitivamente.</p>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw me-1"></i> <a href="/categories/apuntes-asir/">Apuntes ASIR</a>, <a href="/categories/implantaci%C3%B3n-de-sistemas-operativos/">Implantación de Sistemas Operativos</a>, <a href="/categories/miscel%C3%A1neo/">Misceláneo</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw me-1"></i> <a href="/tags/arch-linux/" class="post-tag no-text-decoration">Arch Linux</a> <a href="/tags/btrfs/" class="post-tag no-text-decoration">btrfs</a> <a href="/tags/encriptaci%C3%B3n/" class="post-tag no-text-decoration">encriptación</a> <a href="/tags/grub/" class="post-tag no-text-decoration">grub</a> <a href="/tags/linux/" class="post-tag no-text-decoration">linux</a> <a href="/tags/luks/" class="post-tag no-text-decoration">luks</a>
+</div>
+<div class=" post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2 ">
+<div class="license-wrapper"> Esta publicación está bajo licencia <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> por el autor.</div>
+<div class="share-wrapper d-flex align-items-center"> <span class="share-label text-muted">Compartir</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Instalar%20ArchLinux%20con%20BTRFS%20y%20encriptaci%C3%B3n%20LUKS%20-%20Odisea%20Geek&amp;url=https%3A%2F%2Fodiseageek.es%2Fposts%2Finstalar-archlinux-con-btrfs-y-encriptacion-luks%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Instalar%20ArchLinux%20con%20BTRFS%20y%20encriptaci%C3%B3n%20LUKS%20-%20Odisea%20Geek&amp;u=https%3A%2F%2Fodiseageek.es%2Fposts%2Finstalar-archlinux-con-btrfs-y-encriptacion-luks%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Finstalar-archlinux-con-btrfs-y-encriptacion-luks%2F&amp;text=Instalar%20ArchLinux%20con%20BTRFS%20y%20encriptaci%C3%B3n%20LUKS%20-%20Odisea%20Geek" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Finstalar-archlinux-con-btrfs-y-encriptacion-luks%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Linkedin" aria-label="Linkedin"> <i class="fa-fw fab fa-linkedin"></i> </a> <button id="copy-link" aria-label="Copy link" class="btn small" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar enlace" data-title-succeed="¡Enlace copiado!"> <i class="fa-fw fas fa-link pe-none fs-6"></i> </button> </span>
+</div>
+</div>
+</div></article></main><aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted"><div class="access">
+<section id="access-lastmod"><h2 class="panel-heading">Actualizado recientemente</h2>
+<ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+<li class="text-truncate lh-lg"> <a href="/posts/usando-trivy-en-gitea-actions/">Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/creando-el-blog/">Creando el blog</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/usar-discord-en-linux-sin-actualizar/">Usar Discord en Linux sin actualizar</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/modem-router-y-punto-de-acceso-en-que-se-diferencian/">Módem, router y punto de acceso. En qué se diferencian.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/proteger-headers-con-cloudflare/">Proteger las cabeceras HTTP con Cloudflare, Traefik, Apache y Nginx</a>
+</li>
+</ul></section><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section>
+</div>
+<section id="toc-wrapper" class="ps-0 pe-4"><h2 class="panel-heading ps-3 pt-2 mb-2">Contenido</h2>
+<nav id="toc"></nav></section></aside>
+</div>
+<div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+<aside id="related-posts" aria-labelledby="related-label"><h3 class="mb-4" id="related-label">Continúa leyendo</h3>
+<nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"><article class="col"> <a href="/posts/el-arranque-del-sistema-medidas-de-seguridad-y-el-grub/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1586528931" data-df="DD/MM/YYYY"> 10/04/2020 </time><h4 class="pt-0 my-2">El arranque del sistema, medidas de seguridad y el GRUB.</h4>
+<div class="text-muted"><p> Seguro que todos los que estamos leyendo este post hemos tenido uno de esos ordenadores que al encenderlo soltaba un pitidito, o más de uno. Mi maravilloso ordenador de torre con Windows Vista siem...</p></div>
+</div></a></article><article class="col"> <a href="/posts/mi-experiencia-en-el-mundo-gaming-con-linux-por-que-el-futuro-se-ve-prometedor/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1646494289" data-df="DD/MM/YYYY"> 05/03/2022 </time><h4 class="pt-0 my-2">Mi experiencia en el mundo gaming con Linux. Por qué el futuro se ve prometedor</h4>
+<div class="text-muted"><p> Es innegable que Windows tiene una aplastante cuota de mercado en el mundo gaming, siendo prácticamente inexistente en Linux o Mac. Pero también hay que destacar que en los últimos años el gaming e...</p></div>
+</div></a></article><article class="col"> <a href="/posts/usar-discord-en-linux-sin-actualizar/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1663607592" data-df="DD/MM/YYYY"> 19/09/2022 </time><h4 class="pt-0 my-2">Usar Discord en Linux sin actualizar</h4>
+<div class="text-muted"><p> Esta entrada se ha probado en equipos basados en Debian y en Arch Linux a día 19/09/2022 y 05/09/2023 respectivamente. Es bien sabido que la atención que le da Discord a Linux es bastante ju...</p></div>
+</div></a></article></nav></aside><nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation"> <a href="/posts/en-que-se-diferencia-la-url-uri-y-urn/" class="btn btn-outline-primary" aria-label="Anterior"><p>En qué se diferencia la URL, URI y URN</p></a> <a href="/posts/como-conectarse-por-ssh-sin-contrasena-de-forma-segura/" class="btn btn-outline-primary" aria-label="Siguiente"><p>Cómo conectarse por SSH sin contraseña de forma segura</p></a></nav><script type="text/javascript"> (function () { const origin = 'https://giscus.app'; const iframe = 'iframe.giscus-frame'; const lightTheme = 'light'; const darkTheme = 'dark_dimmed'; let initTheme = lightTheme; const html = document.documentElement; if ( (html.hasAttribute('data-mode') && html.getAttribute('data-mode') === 'dark') || (!html.hasAttribute('data-mode') && window.matchMedia('(prefers-color-scheme: dark)').matches) ) { initTheme = darkTheme; } let giscusAttributes = { src: 'https://giscus.app/client.js', 'data-repo': 'OckhamOdyssey/OdiseaGeekGiscus', 'data-repo-id': 'R_kgDOHsKqGQ', 'data-category': 'General', 'data-category-id': 'DIC_kwDOHsKqGc4CQVil', 'data-mapping': 'pathname', 'data-reactions-enabled': '1', 'data-emit-metadata': '0', 'data-theme': initTheme, 'data-input-position': 'top', 'data-lang': 'es', 'data-loading': 'lazy', crossorigin: 'anonymous', async: '' }; let giscusScript = document.createElement('script'); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value) ); document.getElementById('tail-wrapper').appendChild(giscusScript); addEventListener('message', (event) => { if ( event.source === window && event.data && event.data.direction === ModeToggle.ID ) { /* global theme mode changed */ const mode = event.data.message; const theme = mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme; const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); })(); </script><footer aria-label="Site Info" class=" d-flex flex-column justify-content-center text-muted flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3 "><p> © <time>2023</time> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a>. <span data-bs-toggle="tooltip" data-bs-placement="top" title="Todas las publicaciones de esta página se encuentran bajo licencia Creative Commons Attribution 4.0 International (CC BY 4.0) License por el autor.">Algunos derechos reservados.</span></p>
+<p>Hecho con <img class="emoji" title=":heart:" alt=":heart:" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png" height="20" width="20"> usando <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> y <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.</p></footer>
+</div></div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-11 content">
+<div id="search-hints"><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div>
+<aside aria-label="Scroll to Top"> <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow"> <i class="fas fa-angle-up"></i> </button></aside>
+</div><div id="mask"></div><script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/es.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.3/dist/tocbot.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script defer src="/unregister.js"></script> <script> /* Note: dependent library will be loaded in `js-selector.html` */ SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<article class="px-1 px-sm-2 px-lg-4 px-xl-0"><header><h2><a href="{url}">{title}</a></h2><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div></header><p>{snippet}</p></article>', noResultsText: '<p class="mt-5"></p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>

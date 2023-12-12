@@ -1,0 +1,213 @@
+<!doctype html><html lang="es" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><meta name="generator" content="Jekyll v4.3.2" /><meta property="og:title" content="¿Por qué Windows marca los discos con menos capacidad que los fabricantes?" /><meta property="og:locale" content="es" /><meta name="description" content="Esta entrada va dedicada a un amigo mío que compró recientemente un disco duro de 960GB y se sorprendió al ver que Windows le marcaba mucho menos. Aunque compres un disco de 1TB te marcará aproximadamente 931GB y cuanta más capacidad compres más gigabytes se perderán. Vamos a explicar por qué ocurre esto y quién tiene la culpa. Porque sí, hay un culpable, o varios." /><meta property="og:description" content="Esta entrada va dedicada a un amigo mío que compró recientemente un disco duro de 960GB y se sorprendió al ver que Windows le marcaba mucho menos. Aunque compres un disco de 1TB te marcará aproximadamente 931GB y cuanta más capacidad compres más gigabytes se perderán. Vamos a explicar por qué ocurre esto y quién tiene la culpa. Porque sí, hay un culpable, o varios." /><link rel="canonical" href="https://odiseageek.es/posts/por-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes/" /><meta property="og:url" content="https://odiseageek.es/posts/por-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes/" /><meta property="og:site_name" content="Odisea Geek" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2020-01-15T17:09:08+01:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="¿Por qué Windows marca los discos con menos capacidad que los fabricantes?" /><meta name="twitter:site" content="@OckhamOdyssey" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-01-15T17:09:08+01:00","datePublished":"2020-01-15T17:09:08+01:00","description":"Esta entrada va dedicada a un amigo mío que compró recientemente un disco duro de 960GB y se sorprendió al ver que Windows le marcaba mucho menos. Aunque compres un disco de 1TB te marcará aproximadamente 931GB y cuanta más capacidad compres más gigabytes se perderán. Vamos a explicar por qué ocurre esto y quién tiene la culpa. Porque sí, hay un culpable, o varios.","headline":"¿Por qué Windows marca los discos con menos capacidad que los fabricantes?","mainEntityOfPage":{"@type":"WebPage","@id":"https://odiseageek.es/posts/por-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes/"},"url":"https://odiseageek.es/posts/por-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes/"}</script><title>¿Por qué Windows marca los discos con menos capacidad que los fabricantes? | Odisea Geek</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Odisea Geek"><meta name="application-name" content="Odisea Geek"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.3/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css"> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return 'mode'; } static get MODE_ATTR() { return 'data-mode'; } static get DARK_MODE() { return 'dark'; } static get LIGHT_MODE() { return 'light'; } static get ID() { return 'mode-toggle'; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia('(prefers-color-scheme: dark)'); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { document.documentElement.removeAttribute(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage( { direction: ModeToggle.ID, message: this.modeStatus }, '*' ); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body><aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end"><header class="profile-wrapper"> <a href="/" id="avatar" class="rounded-circle"> <img src="https://avatars.githubusercontent.com/u/60941836?v=4" width="112" height="112" alt="avatar" onerror="this.style.display='none'"> </a><h1 class="site-title"> <a href="/">Odisea Geek</a>
+</h1>
+<p class="site-subtitle fst-italic mb-0">Mi experiencia en el mundo de la informática.</p></header><nav class="flex-column flex-grow-1 w-100 ps-0"><ul class="nav">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home"></i> <span>INICIO</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream"></i> <span>CATEGORÍAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag"></i> <span>ETIQUETAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive"></i> <span>ARCHIVO</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle"></i> <span>SOBRE MÍ</span> </a>
+</li>
+</ul></nav><div class="sidebar-bottom d-flex flex-wrap align-items-center w-100"> <button type="button" class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/OckhamOdyssey" aria-label="github" target="_blank" rel="noopener noreferrer"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/OckhamOdyssey" aria-label="twitter" target="_blank" rel="noopener noreferrer"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20['admin','odiseageek.es'].join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a> <a href="https://www.linkedin.com/in/nicolas-sariego-75670480/" aria-label="linkedin" target="_blank" rel="noopener noreferrer"> <i class="fab fa-linkedin"></i> </a>
+</div></aside><div id="main-wrapper" class="d-flex justify-content-center">
+<div class="container d-flex flex-column px-xxl-5">
+<header id="topbar-wrapper" aria-label="Top Bar"><div id="topbar" class="d-flex align-items-center justify-content-between px-lg-3 h-100">
+<nav id="breadcrumb" aria-label="Breadcrumb"> <span> <a href="/"> Inicio </a> </span> <span>¿Por qué Windows marca los discos con menos capacidad que los fabricantes?</span></nav><button type="button" id="sidebar-trigger" class="btn btn-link"> <i class="fas fa-bars fa-fw"></i> </button><div id="topbar-title"> Post</div>
+<button type="button" id="search-trigger" class="btn btn-link"> <i class="fas fa-search fa-fw"></i> </button> <search class="align-items-center ms-3 ms-lg-0"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Buscar..."> </search> <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancelar</button>
+</div></header><div class="row flex-grow-1">
+<main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4"><article class="px-1"><header><h1 data-toc-skip>¿Por qué Windows marca los discos con menos capacidad que los fabricantes?</h1>
+<div class="post-meta text-muted"> <span> Publicado <time data-ts="1579104548" data-df="DD/MM/YYYY" data-bs-toggle="tooltip" data-bs-placement="bottom"> 15/01/2020 </time> </span><div class="d-flex justify-content-between"> <span> Por <em> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a> </em> </span> <span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="860 palabras"> <em>4 min</em> de lectura</span>
+</div>
+</div></header><div class="content">
+<p>Esta entrada va dedicada a un amigo mío que compró recientemente un disco duro de 960GB y se sorprendió al ver que Windows le marcaba mucho menos. Aunque compres un disco de 1TB te marcará aproximadamente 931GB y cuanta más capacidad compres más gigabytes se perderán. Vamos a explicar por qué ocurre esto y quién tiene la culpa. Porque sí, hay un culpable, o varios.</p>
+<h2 id="unidades-de-medida-en-informática">
+<span class="me-2">Unidades de medida en informática</span><a href="#unidades-de-medida-en-inform%C3%A1tica" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Primero de todo hablemos de como se mide la capacidad de datos en informática. De manera física, toda la información que se transporta por un ordenador funciona con corrientes eléctricas, de forma que todo funciona a base de <strong>hay corriente</strong> y <strong>no hay corriente</strong>, esto se interpreta como 0 y 1. Los datos tanto en los discos duros y los discos de estado sólido son de 0 y 1, cada número de estos se llama <strong>bit</strong> y, la unidad básica de medida se compone de <strong>8 bits y se llama byte</strong>.</p>
+<p>A partir de aquí tenemos las unidades más comunes y que se suelen escuchar más a menudo entre la gente. Vamos a ver una tabla con las unidades de medida del sistema internacional.</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Nombre</th>
+<th>Simbolo</th>
+<th>Cantidad de bytes</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Kilobyte</td>
+<td>KB</td>
+<td>10<sup>3</sup>
+</td>
+</tr>
+<tr>
+<td>Megabyte</td>
+<td>MB</td>
+<td>10<sup>6</sup>
+</td>
+</tr>
+<tr>
+<td>Gigabyte</td>
+<td>GB</td>
+<td>10<sup>9</sup>
+</td>
+</tr>
+<tr>
+<td>Terabyte</td>
+<td>GB</td>
+<td>10<sup>12</sup>
+</td>
+</tr>
+<tr>
+<td>Petabyte</td>
+<td>PB</td>
+<td>10<sup>15</sup>
+</td>
+</tr>
+<tr>
+<td>Exabyte</td>
+<td>EB</td>
+<td>10<sup>18</sup>
+</td>
+</tr>
+<tr>
+<td>Zettabyte</td>
+<td>ZB</td>
+<td>10<sup>21</sup>
+</td>
+</tr>
+<tr>
+<td>Yottabyte</td>
+<td>YB</td>
+<td>10<sup>24</sup>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Estas unidades ascienden exponencialmente en base 10, igual que lo hacen los metros, los gramos. Ahora bien, realmente en informática somos algo especiales. Los metros tienen base 10 porque se usan 10 cifras para generar los números, empezando por el 0 y terminando con el 9, cuando se llega a este número se añade una nueva cifra, las decenas, y así sucesivamente. En informática, como hemos dicho antes, se usa únicamente el 0 y el 1, el código binario, por lo que de forma práctica la unidad de medida tendría que ser en base 2. Esta unidad es la usada y apoyada por el IEEE y vamos a mostrar una tabla con este sistema.</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Nombre</th>
+<th>Simbolo</th>
+<th>Cantidad de bytes</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Kibibyte</td>
+<td>KiB</td>
+<td>2<sup>10</sup>
+</td>
+</tr>
+<tr>
+<td>Mebibyte</td>
+<td>MiB</td>
+<td>2<sup>20</sup>
+</td>
+</tr>
+<tr>
+<td>Gibibyte</td>
+<td>GiB</td>
+<td>2<sup>30</sup>
+</td>
+</tr>
+<tr>
+<td>Tebibyte</td>
+<td>GiB</td>
+<td>2<sup>40</sup>
+</td>
+</tr>
+<tr>
+<td>Pebibyte</td>
+<td>PiB</td>
+<td>2<sup>50</sup>
+</td>
+</tr>
+<tr>
+<td>Exbibyte</td>
+<td>EiB</td>
+<td>2<sup>60</sup>
+</td>
+</tr>
+<tr>
+<td>Zebibyte</td>
+<td>ZiB</td>
+<td>2<sup>70</sup>
+</td>
+</tr>
+<tr>
+<td>Yobibyte</td>
+<td>YiB</td>
+<td>2<sup>80</sup>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>De esta forma podemos ver como en lugar de cambiar la unidad cada 1000 bytes lo hacemos cada 2<sup>10</sup>=1024 bytes. Así vemos que 1TiB son 1024GiB, 1 GiB son 1024MiB, 1MiB son 1024KiB… Con esto lo tenemos todo explicado.</p>
+<h2 id="como-juegan-los-fabricantes-con-esto">
+<span class="me-2">Como juegan los fabricantes con esto</span><a href="#como-juegan-los-fabricantes-con-esto" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Aquí vamos a ver como y por qué los fabricantes juegan con estas unidades de medida. Primero de todo vamos a usar las tablas de arriba para sacar cuantos bytes son la “misma” unidad de medida. Vamos a utilizar 1 mega en sistema decimal y binario.</p>\[1MB = 1^6B = 1.000.000 bytes\] \[1MiB = 2^{20}B = 1.048.576 bytes\]<p>Podemos apreciar como 1MiB tiene ligeramente más capacidad que 1MB. También podemos ver como, a medida que aumenta la capacidad, esta diferencia aumenta. Entonces aquí viene el tema de los fabricantes.</p>
+<p>Un fabricante, como empresa que es, intenta abaratar gasto, una buena forma que tienen de hacerlo es <strong>fabricar sus componentes usando el sistema decimal y no el binario</strong>, principalmente porque tienen que crear menos capacidad, lo cual es más barato y simple.</p>
+<p>El problema viene cuando sabemos que el sistema práctico en la informática es el binario, y anunciar que venden un disco de, por ejemplo, 931GiB no vende tanto que decir que lo venden de 1TB. Ambas afirmaciones son correctas, pero con la última parece que sea más almacenamiento por lo que venden más. Es una <strong>estrategia de marketing</strong> que llevan usando desde siempre.</p>
+<h2 id="como-actúa-windows-ante-esto">
+<span class="me-2">Como actúa Windows ante esto</span><a href="#como-act%C3%BAa-windows-ante-esto" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Todos sabemos que Windows es el sistema operativo más usado a nivel de usuario y esto ayuda (o dificulta) a que los usuarios comprendan la informática. En este caso lo empeora ya que <strong>Windows muestra el sistema binario como si fuera decimal</strong>. Esto quiere decir que un disco de 1TB o 931GiB lo marcará como 931GB, lo cual es completamente erróneo. Desconozco completamente el motivo por el que Windows muestra esto así pero hace ver como si los fabricantes fueran unos mentirosos lo cual es mentira, solo cambian el sistema de medida para hacerlo más comercial.</p>
+<p>He leído muchos artículos que dicen que las empresas de unidades de almacenamiento nos mienten de esta forma, a demás utilizan el sistema de Windows para demostrarlo, decir que el sistema internacional está en binario. Curiosamente ninguno de los artículos mencionan el sistema de la IEEE ni la diferencia de ambos sistemas.</p>
+<h2 id="como-actúa-gnulinux-ante-esto">
+<span class="me-2">Como actúa GNU/Linux ante esto</span><a href="#como-act%C3%BAa-gnulinux-ante-esto" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Ahora viene un punto interesante y olvidado, la posición de Linux ante toda esta absurda batalla de marketing y de tipos de sistemas de medida. Y la respuesta es la indiferencia. Linux no entra en estas batallas y como sistema desarrollado por informáticos competentes cumple todas las normas y muestra las cosas como son. Dependiendo de las herramientas y el sistema que se utilice puede que use el sistema internacional o el de la IEEE siendo este último el más común.</p>
+<p><a href="/assets/2020/01/disco-linux.png" class="popup img-link shimmer"><img src="/assets/2020/01/disco-linux.png" alt="" loading="lazy"></a> <em>Gestor de particiones de KDE mostrando un disco de 1TB como su capacidad real en binario</em></p>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw me-1"></i> <a href="/categories/sistemas-operativos-monopuestos-y-en-red/">Sistemas Operativos Monopuestos y en Red</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw me-1"></i> <a href="/tags/binario/" class="post-tag no-text-decoration">binario</a> <a href="/tags/bytes/" class="post-tag no-text-decoration">bytes</a> <a href="/tags/decimal/" class="post-tag no-text-decoration">decimal</a> <a href="/tags/discos/" class="post-tag no-text-decoration">discos</a> <a href="/tags/linux/" class="post-tag no-text-decoration">linux</a> <a href="/tags/windows/" class="post-tag no-text-decoration">windows</a> <a href="/tags/windows-10/" class="post-tag no-text-decoration">windows 10</a>
+</div>
+<div class=" post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2 ">
+<div class="license-wrapper"> Esta publicación está bajo licencia <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> por el autor.</div>
+<div class="share-wrapper d-flex align-items-center"> <span class="share-label text-muted">Compartir</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=%C2%BFPor%20qu%C3%A9%20Windows%20marca%20los%20discos%20con%20menos%20capacidad%20que%20los%20fabricantes?%20-%20Odisea%20Geek&amp;url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fpor-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=%C2%BFPor%20qu%C3%A9%20Windows%20marca%20los%20discos%20con%20menos%20capacidad%20que%20los%20fabricantes?%20-%20Odisea%20Geek&amp;u=https%3A%2F%2Fodiseageek.es%2Fposts%2Fpor-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fpor-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes%2F&amp;text=%C2%BFPor%20qu%C3%A9%20Windows%20marca%20los%20discos%20con%20menos%20capacidad%20que%20los%20fabricantes?%20-%20Odisea%20Geek" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fpor-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Linkedin" aria-label="Linkedin"> <i class="fa-fw fab fa-linkedin"></i> </a> <button id="copy-link" aria-label="Copy link" class="btn small" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar enlace" data-title-succeed="¡Enlace copiado!"> <i class="fa-fw fas fa-link pe-none fs-6"></i> </button> </span>
+</div>
+</div>
+</div></article></main><aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted"><div class="access">
+<section id="access-lastmod"><h2 class="panel-heading">Actualizado recientemente</h2>
+<ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+<li class="text-truncate lh-lg"> <a href="/posts/usando-trivy-en-gitea-actions/">Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/creando-el-blog/">Creando el blog</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/usar-discord-en-linux-sin-actualizar/">Usar Discord en Linux sin actualizar</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/modem-router-y-punto-de-acceso-en-que-se-diferencian/">Módem, router y punto de acceso. En qué se diferencian.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/proteger-headers-con-cloudflare/">Proteger las cabeceras HTTP con Cloudflare, Traefik, Apache y Nginx</a>
+</li>
+</ul></section><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section>
+</div>
+<section id="toc-wrapper" class="ps-0 pe-4"><h2 class="panel-heading ps-3 pt-2 mb-2">Contenido</h2>
+<nav id="toc"></nav></section></aside>
+</div>
+<div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+<aside id="related-posts" aria-labelledby="related-label"><h3 class="mb-4" id="related-label">Continúa leyendo</h3>
+<nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"><article class="col"> <a href="/posts/probando-juegos-en-manjaro-kde/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1572086202" data-df="DD/MM/YYYY"> 26/10/2019 </time><h4 class="pt-0 my-2">Probando juegos en Manjaro KDE</h4>
+<div class="text-muted"><p> ACTUALIZACIÓN: Se ha publicado una entrada más reciente con fecha a 5/3/22. Pulse aquí para visitarla. En la sección Sobre mí he comentado los ordenadores que tengo ahora mismo, entre estos se...</p></div>
+</div></a></article><article class="col"> <a href="/posts/probando-franz-la-aplicacion-para-tener-todos-tus-chats-en-uno/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1572417143" data-df="DD/MM/YYYY"> 30/10/2019 </time><h4 class="pt-0 my-2">Probando Franz. La aplicación para tener todos tus chats en uno.</h4>
+<div class="text-muted"><p> Solo el cliente de Franz es libre y las funcionalidades están restringidas para la cuenta premium. Todo empezó cuando me di cuenta que, por algún motivo, el cliente de Telegram Desktop para Li...</p></div>
+</div></a></article><article class="col"> <a href="/posts/como-funcionan-las-versiones-de-ubuntu-que-son-las-versiones-lts/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1584132650" data-df="DD/MM/YYYY"> 13/03/2020 </time><h4 class="pt-0 my-2">Cómo funcionan las versiones de Ubuntu. Qué son las versiones LTS</h4>
+<div class="text-muted"><p> A medida que pasa el tiempo todo debe actualizarse, por mucho que nos duela el cambio es permanente e inevitable. Los sistemas operativos están cambiando constantemente ya sea con actualizaciones d...</p></div>
+</div></a></article></nav></aside><nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation"> <a href="/posts/vincular-calendario-de-office-365-a-google-calendar-con-microsoft-power-automate/" class="btn btn-outline-primary" aria-label="Anterior"><p>Vincular calendario de Office 365 a Google Calendar con Microsoft Power Automate</p></a> <a href="/posts/actualizar-la-distribucion-de-ubuntu-sin-borrar-datos/" class="btn btn-outline-primary" aria-label="Siguiente"><p>Actualizar la distribución de Ubuntu sin borrar datos</p></a></nav><script type="text/javascript"> (function () { const origin = 'https://giscus.app'; const iframe = 'iframe.giscus-frame'; const lightTheme = 'light'; const darkTheme = 'dark_dimmed'; let initTheme = lightTheme; const html = document.documentElement; if ( (html.hasAttribute('data-mode') && html.getAttribute('data-mode') === 'dark') || (!html.hasAttribute('data-mode') && window.matchMedia('(prefers-color-scheme: dark)').matches) ) { initTheme = darkTheme; } let giscusAttributes = { src: 'https://giscus.app/client.js', 'data-repo': 'OckhamOdyssey/OdiseaGeekGiscus', 'data-repo-id': 'R_kgDOHsKqGQ', 'data-category': 'General', 'data-category-id': 'DIC_kwDOHsKqGc4CQVil', 'data-mapping': 'pathname', 'data-reactions-enabled': '1', 'data-emit-metadata': '0', 'data-theme': initTheme, 'data-input-position': 'top', 'data-lang': 'es', 'data-loading': 'lazy', crossorigin: 'anonymous', async: '' }; let giscusScript = document.createElement('script'); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value) ); document.getElementById('tail-wrapper').appendChild(giscusScript); addEventListener('message', (event) => { if ( event.source === window && event.data && event.data.direction === ModeToggle.ID ) { /* global theme mode changed */ const mode = event.data.message; const theme = mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme; const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); })(); </script><footer aria-label="Site Info" class=" d-flex flex-column justify-content-center text-muted flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3 "><p> © <time>2023</time> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a>. <span data-bs-toggle="tooltip" data-bs-placement="top" title="Todas las publicaciones de esta página se encuentran bajo licencia Creative Commons Attribution 4.0 International (CC BY 4.0) License por el autor.">Algunos derechos reservados.</span></p>
+<p>Hecho con <img class="emoji" title=":heart:" alt=":heart:" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png" height="20" width="20"> usando <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> y <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.</p></footer>
+</div></div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-11 content">
+<div id="search-hints"><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div>
+<aside aria-label="Scroll to Top"> <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow"> <i class="fas fa-angle-up"></i> </button></aside>
+</div><div id="mask"></div><script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/es.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.3/dist/tocbot.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script> /* see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options> */ MathJax = { tex: { /* start/end delimiter pairs for in-line math */ inlineMath: [ ['$', '$'], ['\\(', '\\)'] ], /* start/end delimiter pairs for display math */ displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ] } }; </script> <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script> <script defer src="/unregister.js"></script> <script> /* Note: dependent library will be loaded in `js-selector.html` */ SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<article class="px-1 px-sm-2 px-lg-4 px-xl-0"><header><h2><a href="{url}">{title}</a></h2><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div></header><p>{snippet}</p></article>', noResultsText: '<p class="mt-5"></p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>

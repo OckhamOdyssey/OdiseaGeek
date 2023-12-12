@@ -1,0 +1,590 @@
+<!doctype html><html lang="es" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><meta name="generator" content="Jekyll v4.3.2" /><meta property="og:title" content="Signo y magnitud, complemento a 1 y a 2 y el exceso Z para tontos" /><meta property="og:locale" content="es" /><meta name="description" content="La aritmética binaria, al igual que toda rama de las matemáticas, puede ser tediosa, frustrarte y complicada si no se tiene una explicación simple y unas buenas bases. En esta entrada intentaré explicar las operaciones de suma y resta utilizadas por las máquinas de la manera lo más simple que pueda." /><meta property="og:description" content="La aritmética binaria, al igual que toda rama de las matemáticas, puede ser tediosa, frustrarte y complicada si no se tiene una explicación simple y unas buenas bases. En esta entrada intentaré explicar las operaciones de suma y resta utilizadas por las máquinas de la manera lo más simple que pueda." /><link rel="canonical" href="https://odiseageek.es/posts/signo-y-magnitud-complemento-a-1-y-a-2-y-el-exceso-z-para-tontos/" /><meta property="og:url" content="https://odiseageek.es/posts/signo-y-magnitud-complemento-a-1-y-a-2-y-el-exceso-z-para-tontos/" /><meta property="og:site_name" content="Odisea Geek" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2020-12-18T00:11:00+01:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Signo y magnitud, complemento a 1 y a 2 y el exceso Z para tontos" /><meta name="twitter:site" content="@OckhamOdyssey" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2020-12-18T00:11:00+01:00","datePublished":"2020-12-18T00:11:00+01:00","description":"La aritmética binaria, al igual que toda rama de las matemáticas, puede ser tediosa, frustrarte y complicada si no se tiene una explicación simple y unas buenas bases. En esta entrada intentaré explicar las operaciones de suma y resta utilizadas por las máquinas de la manera lo más simple que pueda.","headline":"Signo y magnitud, complemento a 1 y a 2 y el exceso Z para tontos","mainEntityOfPage":{"@type":"WebPage","@id":"https://odiseageek.es/posts/signo-y-magnitud-complemento-a-1-y-a-2-y-el-exceso-z-para-tontos/"},"url":"https://odiseageek.es/posts/signo-y-magnitud-complemento-a-1-y-a-2-y-el-exceso-z-para-tontos/"}</script><title>Signo y magnitud, complemento a 1 y a 2 y el exceso Z para tontos | Odisea Geek</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Odisea Geek"><meta name="application-name" content="Odisea Geek"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.3/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css"> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return 'mode'; } static get MODE_ATTR() { return 'data-mode'; } static get DARK_MODE() { return 'dark'; } static get LIGHT_MODE() { return 'light'; } static get ID() { return 'mode-toggle'; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia('(prefers-color-scheme: dark)'); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { document.documentElement.removeAttribute(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage( { direction: ModeToggle.ID, message: this.modeStatus }, '*' ); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body><aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end"><header class="profile-wrapper"> <a href="/" id="avatar" class="rounded-circle"> <img src="https://avatars.githubusercontent.com/u/60941836?v=4" width="112" height="112" alt="avatar" onerror="this.style.display='none'"> </a><h1 class="site-title"> <a href="/">Odisea Geek</a>
+</h1>
+<p class="site-subtitle fst-italic mb-0">Mi experiencia en el mundo de la informática.</p></header><nav class="flex-column flex-grow-1 w-100 ps-0"><ul class="nav">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home"></i> <span>INICIO</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream"></i> <span>CATEGORÍAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag"></i> <span>ETIQUETAS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive"></i> <span>ARCHIVO</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle"></i> <span>SOBRE MÍ</span> </a>
+</li>
+</ul></nav><div class="sidebar-bottom d-flex flex-wrap align-items-center w-100"> <button type="button" class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/OckhamOdyssey" aria-label="github" target="_blank" rel="noopener noreferrer"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/OckhamOdyssey" aria-label="twitter" target="_blank" rel="noopener noreferrer"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20['admin','odiseageek.es'].join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a> <a href="https://www.linkedin.com/in/nicolas-sariego-75670480/" aria-label="linkedin" target="_blank" rel="noopener noreferrer"> <i class="fab fa-linkedin"></i> </a>
+</div></aside><div id="main-wrapper" class="d-flex justify-content-center">
+<div class="container d-flex flex-column px-xxl-5">
+<header id="topbar-wrapper" aria-label="Top Bar"><div id="topbar" class="d-flex align-items-center justify-content-between px-lg-3 h-100">
+<nav id="breadcrumb" aria-label="Breadcrumb"> <span> <a href="/"> Inicio </a> </span> <span>Signo y magnitud, complemento a 1 y a 2 y el exceso Z para tontos</span></nav><button type="button" id="sidebar-trigger" class="btn btn-link"> <i class="fas fa-bars fa-fw"></i> </button><div id="topbar-title"> Post</div>
+<button type="button" id="search-trigger" class="btn btn-link"> <i class="fas fa-search fa-fw"></i> </button> <search class="align-items-center ms-3 ms-lg-0"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Buscar..."> </search> <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancelar</button>
+</div></header><div class="row flex-grow-1">
+<main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4"><article class="px-1"><header><h1 data-toc-skip>Signo y magnitud, complemento a 1 y a 2 y el exceso Z para tontos</h1>
+<div class="post-meta text-muted"> <span> Publicado <time data-ts="1608246660" data-df="DD/MM/YYYY" data-bs-toggle="tooltip" data-bs-placement="bottom"> 18/12/2020 </time> </span><div class="d-flex justify-content-between"> <span> Por <em> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a> </em> </span> <span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="1327 palabras"> <em>7 min</em> de lectura</span>
+</div>
+</div></header><div class="content">
+<p>La aritmética binaria, al igual que toda rama de las matemáticas, puede ser tediosa, frustrarte y complicada si no se tiene una explicación simple y unas buenas bases. En esta entrada intentaré explicar las operaciones de suma y resta utilizadas por las máquinas de la manera lo más simple que pueda.</p>
+<p>Para empezar, debemos comprender que las máquinas funcionan con el sistema binario (del 0 al 1), y no con el decimal (del 0 al 9). Para diferenciarlo y remarcarlo pondremos a veces los números en base 10 (n<sub>10</sub>) o en base 2 (n<sub>2</sub>).</p>
+<h2 id="introducción">
+<span class="me-2">Introducción</span><a href="#introducci%C3%B3n" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Antes que nada, debo remarcar que esto se puede realizar con cualquier cantidad de bits, pero en esta entrada solo usaremos 4 bits para mostrar ejemplos más sencillos.</p>
+<p>Los bits en binario irán del 0000 al 1111, el valor de estos tendrán un significado diferente en cada ocasión, tendremos tablas para mostrarlo más visualmente.</p>
+<h2 id="signo-y-magnitud">
+<span class="me-2">Signo y Magnitud</span><a href="#signo-y-magnitud" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>El sistema de Signo y Magnitud utiliza el primer bit para identificar si el número es positivo o negativo, 0 indica que el número es positivo y 1 negativo. De esta forma, con un total de 4 bits, podemos obtener desde el 7 hasta el -7. El número 0 también tiene su contraparte negativa.</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Número decimal</th>
+<th>Representación Signo y Magnitud</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>-</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0111</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0110</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0101</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0100</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0011</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0010</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0001</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0000</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>1001</td>
+</tr>
+<tr>
+<td>-2</td>
+<td>1010</td>
+</tr>
+<tr>
+<td>-3</td>
+<td>1011</td>
+</tr>
+<tr>
+<td>-4</td>
+<td>1100</td>
+</tr>
+<tr>
+<td>-5</td>
+<td>1101</td>
+</tr>
+<tr>
+<td>-6</td>
+<td>1110</td>
+</tr>
+<tr>
+<td>-7</td>
+<td>1111</td>
+</tr>
+<tr>
+<td>-8</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="cuando-sumar-y-cuando-restar">
+<span class="me-2">Cuando sumar y cuando restar</span><a href="#cuando-sumar-y-cuando-restar" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Es importante saber en qué momento hay que operar con suma y en cual se utiliza la resta. En el caso del Signo y Magnitud <strong>se realiza una suma cuando los signos son iguales, y se resta cuando son distintos signos</strong>.</p>
+<p>Tenemos que tener en cuenta que en <strong>-5 - 4</strong> se tendría que realizar una suma, porque el signo <strong>-</strong> se lo lleva el 4, resultando en <strong>-5 + (-4)</strong> y ambos dígitos tienen el mismo signo.</p>
+<h3 id="suma">
+<span class="me-2">Suma</span><a href="#suma" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>La suma en Signo y Magnitud se realiza como una suma binaria normal y corriente, obviando el primer dígito, que indica el Signo.</p>
+<p><a href="/assets/2020/12/imagen-1.png" class="popup img-link shimmer"><img src="/assets/2020/12/imagen-1.png" alt="" loading="lazy"></a></p>
+<p>En las sumas ambos signos son iguales, por lo que el signo se mantiene, ya sea 1 o 0.</p>
+<h3 id="resta">
+<span class="me-2">Resta</span><a href="#resta" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>La resta se hace cuando el signo de ambos números es distinto. Se opera como una resta normal, apartando los símbolos. <strong>El símbolo que queda como resultado es el del número de mayor magnitud</strong>.</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th> </th>
+<th> </th>
+</tr></thead>
+<tbody><tr>
+<td><a href="/assets/2020/12/bYXhhcH.png" class="popup img-link shimmer"><img src="/assets/2020/12/bYXhhcH.png" alt="" loading="lazy"></a></td>
+<td><a href="/assets/2020/12/vjHyohB.png" class="popup img-link shimmer"><img src="/assets/2020/12/vjHyohB.png" alt="" loading="lazy"></a></td>
+</tr></tbody>
+</table></div>
+<h2 id="complemento-a-1">
+<span class="me-2">Complemento a 1</span><a href="#complemento-a-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>La representación del complemento a 1 (a partir de ahora C<sub>1</sub>) utiliza como base el Signo y Magnitud. <strong>El C<sub>1</sub> no varía frente al Signo y Magnitud cuando se trata de números positivos</strong>. En los números negativos se debe calcular la diferencia entre el número máximo (7<sub>10</sub> en nuestro caso porque nuestro máximo binario es 111<sub>2</sub>) y nuestro número. Por ejemplo, el C<sub>1</sub> de 6 es 1 porque solo le falta 1 número para llegar a 7, el C<sub>1</sub> de 3 es 4 porque le faltan 4 números para llegar a 7.</p>
+<p>Una forma rápida de calcular esto en binario es<strong> invirtiendo la magnitud de los números negativos</strong>. Siempre manteniendo intacto el primer bit, porque este indica el signo. Quedando así el 1100 como 1011. A continuación una tabla comparativa.</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Decimal</th>
+<th>Signo y Magnitud</th>
+<th>Complemento a 1</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0111</td>
+<td>0111</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0110</td>
+<td>0110</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0101</td>
+<td>0101</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0100</td>
+<td>0100</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0011</td>
+<td>0011</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0010</td>
+<td>0010</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0001</td>
+<td>0001</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0000</td>
+<td>0000</td>
+</tr>
+<tr>
+<td>-0</td>
+<td>1000</td>
+<td>1111</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>1001</td>
+<td>1110</td>
+</tr>
+<tr>
+<td>-2</td>
+<td>1010</td>
+<td>1101</td>
+</tr>
+<tr>
+<td>-3</td>
+<td>1011</td>
+<td>1100</td>
+</tr>
+<tr>
+<td>-4</td>
+<td>1100</td>
+<td>1011</td>
+</tr>
+<tr>
+<td>-5</td>
+<td>1101</td>
+<td>1010</td>
+</tr>
+<tr>
+<td>-6</td>
+<td>1110</td>
+<td>1001</td>
+</tr>
+<tr>
+<td>-7</td>
+<td>1111</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>-8</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="cuando-sumar-y-cuando-restar-1">
+<span class="me-2">Cuando sumar y cuando restar</span><a href="#cuando-sumar-y-cuando-restar-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>La norma de oro es que <strong>siempre se suma en los complementos</strong>. Cuando se trata de <strong>5 + 2</strong> puede parecer fácil, pero cuando nos encontramos un <strong>5 - 2</strong> debemos juntar el signo <strong>-</strong> con el número siguiente, quedando así <strong>5 + (-2)</strong>.</p>
+<p>Con los números negativos pasa lo mismo, un <strong>-5 - 2</strong> se transforma en <strong>-5 + (-2)</strong>.</p>
+<h3 id="suma-1">
+<span class="me-2">Suma</span><a href="#suma-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>En este caso, a diferencia del Signo y Magnitud, <strong>el signo se incluye en la suma</strong>.</p>
+<p>Habrá ocasiones donde aparezca un exceso. El exceso es aquel número que sobrepasa el límite de nuestras operaciones. En este caso, trabajamos con un máximo de 4 dígitos (de 0000 a 1111), un exceso sería el 10000.</p>
+<p>Cuando aparece un exceso, se retira y se suma al resultado. Aquí vemos un ejemplo:</p>
+<p><a href="/assets/2020/12/imagen-2.png" class="popup img-link shimmer"><img src="/assets/2020/12/imagen-2.png" alt="" loading="lazy"></a></p>
+<p>Podemos comprobar en la tabla de arriba como <strong>1001</strong> coincide con <strong>-6</strong> en C<sub>1</sub>.</p>
+<h2 id="complemento-a-2">
+<span class="me-2">Complemento a 2</span><a href="#complemento-a-2" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Para conseguir el Complemento a 2 (a partir de ahora C<sub>2</sub>) se debe obtener primero el C<sub>1</sub> y sumarle 1 a los número negativos. El objetivo de esto es evitar la suma del número excedido que se realiza siempre en el C<sub>1</sub>. Como siempre, aquí vamos con una tabla comparativa.</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Decimal</th>
+<th>Signo y Magnitud</th>
+<th>Complemento a 1</th>
+<th>Complemento a 2</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0111</td>
+<td>0111</td>
+<td>0111</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0110</td>
+<td>0110</td>
+<td>0110</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0101</td>
+<td>0101</td>
+<td>0101</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0100</td>
+<td>0100</td>
+<td>0100</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0011</td>
+<td>0011</td>
+<td>0011</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0010</td>
+<td>0010</td>
+<td>0010</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0001</td>
+<td>0001</td>
+<td>0001</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0000</td>
+<td>0000</td>
+<td>000</td>
+</tr>
+<tr>
+<td>-0</td>
+<td>1000</td>
+<td>1111</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>1001</td>
+<td>1110</td>
+<td>1111</td>
+</tr>
+<tr>
+<td>-2</td>
+<td>1010</td>
+<td>1101</td>
+<td>1110</td>
+</tr>
+<tr>
+<td>-3</td>
+<td>1011</td>
+<td>1100</td>
+<td>1101</td>
+</tr>
+<tr>
+<td>-4</td>
+<td>1100</td>
+<td>1011</td>
+<td>1100</td>
+</tr>
+<tr>
+<td>-5</td>
+<td>1101</td>
+<td>1010</td>
+<td>1011</td>
+</tr>
+<tr>
+<td>-6</td>
+<td>1110</td>
+<td>1001</td>
+<td>1010</td>
+</tr>
+<tr>
+<td>-7</td>
+<td>1111</td>
+<td>1000</td>
+<td>1001</td>
+</tr>
+<tr>
+<td>-8</td>
+<td>-</td>
+<td>-</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="suma-2">
+<span class="me-2">Suma</span><a href="#suma-2" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Con el cambio que ya hemos realizado en la tabla, a partir de ahora la suma se realiza exactamente igual. La única diferencia ahora es que el número excedente se descarta en lugar de sumarlo. Recordamos que los positivos son iguales en el C<sub>2</sub>, el C<sub>1</sub> y el Signo y Magnitud</p>
+<p><a href="/assets/2020/12/imagen-3.png" class="popup img-link shimmer"><img src="/assets/2020/12/imagen-3.png" alt="" loading="lazy"></a></p>
+<h2 id="exceso-z">
+<span class="me-2">Exceso Z</span><a href="#exceso-z" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>El Exceso Z varía dependiendo de la cantidad de dígitos con los que trabajemos, en este caso solo con 4. Para calcular el Exceso Z tenemos que saber que <strong>Z = 2<sup>(n-1)</sup></strong> siendo <strong>n</strong> el número de dígitos. <strong>Z = 2<sup>(4-1)</sup> = 2<sup>3</sup> = 8</strong>. Con esto conseguimos saber cual es el número máximo que podemos obtener. Como podemos observar en las tablas de arriba, el número <strong>8</strong> y <strong>-8</strong> siempre aparecen como primera y última opción.</p>
+<p>Ahora que conocemos el número mínimo y máximo, tenemos que tener en cuenta que el mínimo será el 0 a partir de ahora, en otras palabras, <strong>-8<sub>10</sub> = 0000<sub>2</sub></strong>. Para tenerlo de forma más visual y con sentido, vamos a ver la tabla.</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Decimal</th>
+<th>Signo y Magnitud</th>
+<th>Complemento a 1</th>
+<th>Complemento a 2</th>
+<th>Exceso Z</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0111</td>
+<td>0111</td>
+<td>0111</td>
+<td>1111</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0110</td>
+<td>0110</td>
+<td>0110</td>
+<td>1110</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0101</td>
+<td>0101</td>
+<td>0101</td>
+<td>1101</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0100</td>
+<td>0100</td>
+<td>0100</td>
+<td>1100</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0011</td>
+<td>0011</td>
+<td>0011</td>
+<td>1011</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0010</td>
+<td>0010</td>
+<td>0010</td>
+<td>1010</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0001</td>
+<td>0001</td>
+<td>0001</td>
+<td>1001</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0000</td>
+<td>0000</td>
+<td>000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>-0</td>
+<td>1000</td>
+<td>1111</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>1001</td>
+<td>1110</td>
+<td>1111</td>
+<td>0111</td>
+</tr>
+<tr>
+<td>-2</td>
+<td>1010</td>
+<td>1101</td>
+<td>1110</td>
+<td>0110</td>
+</tr>
+<tr>
+<td>-3</td>
+<td>1011</td>
+<td>1100</td>
+<td>1101</td>
+<td>0101</td>
+</tr>
+<tr>
+<td>-4</td>
+<td>1100</td>
+<td>1011</td>
+<td>1100</td>
+<td>0100</td>
+</tr>
+<tr>
+<td>-5</td>
+<td>1101</td>
+<td>1010</td>
+<td>1011</td>
+<td>0011</td>
+</tr>
+<tr>
+<td>-6</td>
+<td>1110</td>
+<td>1001</td>
+<td>1010</td>
+<td>0010</td>
+</tr>
+<tr>
+<td>-7</td>
+<td>1111</td>
+<td>1000</td>
+<td>1001</td>
+<td>0001</td>
+</tr>
+<tr>
+<td>-8</td>
+<td>-</td>
+<td>-</td>
+<td>1000</td>
+<td>0000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Si se es observador, se puede ver como <strong>el Exceso Z es igual al C<sub>2</sub> con el signo invertido</strong>. Esta es una forma más fácil de obtenerlo.</p>
+<h3 id="cuando-sumar-y-cuando-restar-2">
+<span class="me-2">Cuando sumar y cuando restar</span><a href="#cuando-sumar-y-cuando-restar-2" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Ya hemos visto como en Signo y Magnitud se sumaba con los signos iguales y restaba con signos distintos, y en los complementos siempre se suma. En este caso, <strong>nuestro objetivo será hacer que ambos números tengan el mismo signo</strong>.</p>
+<p><a href="/assets/2020/12/imagen-4.png" class="popup img-link shimmer"><img src="/assets/2020/12/imagen-4.png" alt="" loading="lazy"></a></p>
+<p>Una vez hayamos preparado la operación, será hora de sumar o restar dependiendo de las circunstancias.</p>
+<h3 id="suma-3">
+<span class="me-2">Suma</span><a href="#suma-3" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>Inicialmente, la suma se realiza de forma normal, teniendo en cuenta el signo durante la operación. Tras sumar, debemos restar el Exceso Z, recordamos que en nuestro caso es <strong>8<sub>10</sub> = 1000<sub>2</sub></strong>. Siempre va a ser un <strong>1</strong> en la posición más alta, seguido de <strong>0</strong> en el resto de posiciones.</p>
+<p><a href="/assets/2020/12/imagen-5.png" class="popup img-link shimmer"><img src="/assets/2020/12/imagen-5.png" alt="" loading="lazy"></a></p>
+<h3 id="resta-1">
+<span class="me-2">Resta</span><a href="#resta-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<p>En el caso de la resta, también haremos la operación de forma normal. Cuando tengamos el resultado, tendremos que <strong>sumar</strong> el Exceso Z.&lt;/p&gt;</p>
+<p><a href="/assets/2020/12/imagen-6.png" class="popup img-link shimmer"><img src="/assets/2020/12/imagen-6.png" alt="" loading="lazy"></a></p>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw me-1"></i> <a href="/categories/apuntes-asir/">Apuntes ASIR</a>, <a href="/categories/fundamentos-del-hardware/">Fundamentos del Hardware</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw me-1"></i> <a href="/tags/aritm%C3%A9tica/" class="post-tag no-text-decoration">aritmética</a> <a href="/tags/binario/" class="post-tag no-text-decoration">binario</a> <a href="/tags/complemento/" class="post-tag no-text-decoration">complemento</a> <a href="/tags/resta/" class="post-tag no-text-decoration">resta</a> <a href="/tags/suma/" class="post-tag no-text-decoration">suma</a>
+</div>
+<div class=" post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2 ">
+<div class="license-wrapper"> Esta publicación está bajo licencia <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> por el autor.</div>
+<div class="share-wrapper d-flex align-items-center"> <span class="share-label text-muted">Compartir</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Signo%20y%20magnitud,%20complemento%20a%201%20y%20a%202%20y%20el%20exceso%20Z%20para%20tontos%20-%20Odisea%20Geek&amp;url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fsigno-y-magnitud-complemento-a-1-y-a-2-y-el-exceso-z-para-tontos%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Signo%20y%20magnitud,%20complemento%20a%201%20y%20a%202%20y%20el%20exceso%20Z%20para%20tontos%20-%20Odisea%20Geek&amp;u=https%3A%2F%2Fodiseageek.es%2Fposts%2Fsigno-y-magnitud-complemento-a-1-y-a-2-y-el-exceso-z-para-tontos%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fsigno-y-magnitud-complemento-a-1-y-a-2-y-el-exceso-z-para-tontos%2F&amp;text=Signo%20y%20magnitud,%20complemento%20a%201%20y%20a%202%20y%20el%20exceso%20Z%20para%20tontos%20-%20Odisea%20Geek" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fodiseageek.es%2Fposts%2Fsigno-y-magnitud-complemento-a-1-y-a-2-y-el-exceso-z-para-tontos%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Linkedin" aria-label="Linkedin"> <i class="fa-fw fab fa-linkedin"></i> </a> <button id="copy-link" aria-label="Copy link" class="btn small" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar enlace" data-title-succeed="¡Enlace copiado!"> <i class="fa-fw fas fa-link pe-none fs-6"></i> </button> </span>
+</div>
+</div>
+</div></article></main><aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted"><div class="access">
+<section id="access-lastmod"><h2 class="panel-heading">Actualizado recientemente</h2>
+<ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+<li class="text-truncate lh-lg"> <a href="/posts/usando-trivy-en-gitea-actions/">Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/creando-el-blog/">Creando el blog</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/usar-discord-en-linux-sin-actualizar/">Usar Discord en Linux sin actualizar</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/modem-router-y-punto-de-acceso-en-que-se-diferencian/">Módem, router y punto de acceso. En qué se diferencian.</a>
+</li>
+<li class="text-truncate lh-lg"> <a href="/posts/proteger-headers-con-cloudflare/">Proteger las cabeceras HTTP con Cloudflare, Traefik, Apache y Nginx</a>
+</li>
+</ul></section><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section>
+</div>
+<section id="toc-wrapper" class="ps-0 pe-4"><h2 class="panel-heading ps-3 pt-2 mb-2">Contenido</h2>
+<nav id="toc"></nav></section></aside>
+</div>
+<div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+<aside id="related-posts" aria-labelledby="related-label"><h3 class="mb-4" id="related-label">Continúa leyendo</h3>
+<nav class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-4"><article class="col"> <a href="/posts/por-que-windows-marca-los-discos-con-menos-capacidad-que-los-fabricantes/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1579104548" data-df="DD/MM/YYYY"> 15/01/2020 </time><h4 class="pt-0 my-2">¿Por qué Windows marca los discos con menos capacidad que los fabricantes?</h4>
+<div class="text-muted"><p> Esta entrada va dedicada a un amigo mío que compró recientemente un disco duro de 960GB y se sorprendió al ver que Windows le marcaba mucho menos. Aunque compres un disco de 1TB te marcará aproxima...</p></div>
+</div></a></article><article class="col"> <a href="/posts/arquitectura-von-neumann-que-es-y-como-funciona/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1600610017" data-df="DD/MM/YYYY"> 20/09/2020 </time><h4 class="pt-0 my-2">Arquitectura Von Neumann. Qué es y cómo funciona</h4>
+<div class="text-muted"><p> Puedes profundizar conceptos en la segunda parte; con más datos, detalles e imágenes. Arquitectura Von Neumann. Qué es y cómo funciona. Los primeros ordenadores, surgidos en la década de los 4...</p></div>
+</div></a></article><article class="col"> <a href="/posts/instalar-archlinux-con-btrfs-y-encriptacion-luks/" class="post-preview card h-100"><div class="card-body"> <time data-ts="1625770158" data-df="DD/MM/YYYY"> 08/07/2021 </time><h4 class="pt-0 my-2">Instalar ArchLinux con BTRFS y encriptación LUKS</h4>
+<div class="text-muted"><p> Tras varios meses usando Manjaro como sistema principal, viendo la comodidad que me aporta y los pocos problemas que he tenido (comparado con los que me dio Ubuntu), he decidido dar el paso de migr...</p></div>
+</div></a></article></nav></aside><nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation"> <a href="/posts/mostrar-asteriscos-al-escribir-la-contrasena-de-gnu-linux/" class="btn btn-outline-primary" aria-label="Anterior"><p>Mostrar asteriscos al escribir la contraseña de GNU/Linux</p></a> <a href="/posts/montar-unidades-smb-o-cifs-en-linux-con-mount-o-fstab/" class="btn btn-outline-primary" aria-label="Siguiente"><p>Montar unidades SMB o CIFS en Linux con mount o fstab</p></a></nav><script type="text/javascript"> (function () { const origin = 'https://giscus.app'; const iframe = 'iframe.giscus-frame'; const lightTheme = 'light'; const darkTheme = 'dark_dimmed'; let initTheme = lightTheme; const html = document.documentElement; if ( (html.hasAttribute('data-mode') && html.getAttribute('data-mode') === 'dark') || (!html.hasAttribute('data-mode') && window.matchMedia('(prefers-color-scheme: dark)').matches) ) { initTheme = darkTheme; } let giscusAttributes = { src: 'https://giscus.app/client.js', 'data-repo': 'OckhamOdyssey/OdiseaGeekGiscus', 'data-repo-id': 'R_kgDOHsKqGQ', 'data-category': 'General', 'data-category-id': 'DIC_kwDOHsKqGc4CQVil', 'data-mapping': 'pathname', 'data-reactions-enabled': '1', 'data-emit-metadata': '0', 'data-theme': initTheme, 'data-input-position': 'top', 'data-lang': 'es', 'data-loading': 'lazy', crossorigin: 'anonymous', async: '' }; let giscusScript = document.createElement('script'); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value) ); document.getElementById('tail-wrapper').appendChild(giscusScript); addEventListener('message', (event) => { if ( event.source === window && event.data && event.data.direction === ModeToggle.ID ) { /* global theme mode changed */ const mode = event.data.message; const theme = mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme; const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); })(); </script><footer aria-label="Site Info" class=" d-flex flex-column justify-content-center text-muted flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3 "><p> © <time>2023</time> <a href="https://twitter.com/OckhamOdyssey">Ockham Odyssey</a>. <span data-bs-toggle="tooltip" data-bs-placement="top" title="Todas las publicaciones de esta página se encuentran bajo licencia Creative Commons Attribution 4.0 International (CC BY 4.0) License por el autor.">Algunos derechos reservados.</span></p>
+<p>Hecho con <img class="emoji" title=":heart:" alt=":heart:" src="https://github.githubassets.com/images/icons/emoji/unicode/2764.png" height="20" width="20"> usando <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> y <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.</p></footer>
+</div></div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-11 content">
+<div id="search-hints"><section><h2 class="panel-heading">Etiquetas más usadas</h2>
+<div class="d-flex flex-wrap mt-3 mb-1 me-3"> <a class="post-tag btn btn-outline-primary" href="/tags/linux/">linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/windows/">windows</a> <a class="post-tag btn btn-outline-primary" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag btn btn-outline-primary" href="/tags/kde/">KDE</a> <a class="post-tag btn btn-outline-primary" href="/tags/manjaro/">Manjaro</a> <a class="post-tag btn btn-outline-primary" href="/tags/git/">git</a> <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a> <a class="post-tag btn btn-outline-primary" href="/tags/google/">google</a> <a class="post-tag btn btn-outline-primary" href="/tags/gpg/">gpg</a> <a class="post-tag btn btn-outline-primary" href="/tags/instalar/">instalar</a>
+</div></section></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div>
+<aside aria-label="Scroll to Top"> <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow"> <i class="fas fa-angle-up"></i> </button></aside>
+</div><div id="mask"></div><script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/es.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.3/dist/tocbot.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script defer src="/unregister.js"></script> <script> /* Note: dependent library will be loaded in `js-selector.html` */ SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<article class="px-1 px-sm-2 px-lg-4 px-xl-0"><header><h2><a href="{url}">{title}</a></h2><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div></header><p>{snippet}</p></article>', noResultsText: '<p class="mt-5"></p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>
