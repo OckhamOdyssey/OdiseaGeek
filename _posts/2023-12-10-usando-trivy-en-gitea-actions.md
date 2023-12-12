@@ -18,7 +18,7 @@ tags:
 > Esta entrada cuenta con un [TL;DR](#tldr)
 {: .prompt-tip }
 
-En esta entrada voy a explicar como implementar Trivy en el CI/CD de Gitea. Si no sabes muy bien alguno de esos puntos lo explicaré a continuación, si no, puedes bajar directamente al apartado de implementación.
+Voy a explicar como implementar Trivy en el CI/CD de Gitea. Si no sabes muy bien alguno de esos puntos lo explicaré a continuación, si no, puedes bajar directamente al apartado de [implementación](#creando-un-gitea-action).
 
 ## Qué es CI/CD
 
@@ -29,7 +29,7 @@ CI/CD viene de las siglas **Continuous Integration/Continuous Delivery** o **Imp
 - **Asegurar la calidad del código**: Los entornos de desarrollo pueden tener definidas ciertas políticas, estándares, buenas prácticas... básicamente, unas normas. Puede velar por el cumplimiento de las buenas prácticas de la empresa.
 - **Despliegues automáticos en producción**: A cada cambio en el repositorio y tras pasar las pruebas, se puede automatizar el despliegue en los servidores de producción, evitando así tener que hacerlo manualmente.
 
-En resumidas cuentas, gracias al CI/CD se reduce el tiempo de despliegue, el error humano y se flexibilizan y estandarizan los procesos de prueba y despliegue.
+En resumidas cuentas, gracias al CI/CD se reduce el tiempo de despliegue, el error humano y se flexibilizan y estandarizan los procesos de prueba y despliegue. Igulamente, intentaré dedicar una entrada a parte a explicar la metodología DevOps y DevSecOps, aunque Internet ya esté plagado de ellas.
 
 ### Automatizaciones de seguridad por CI/CD
 
@@ -91,7 +91,7 @@ Aunque sigo teniendo GitHub para cosas puntuales, desde hace más de un año que
         - name: Image Scan
             uses: aquasecurity/trivy-action@master
             with:
-            image-ref: 'gitea.host.tld/user-or-org-name/${{ steps.meta.outputs.REPO_NAME }}:latest'
+            image-ref: 'gitea.host.tld/user-or-org-name/{% raw %}${{ steps.meta.outputs.REPO_NAME }}{% endraw %}:latest'
             format: 'table'
             exit-code: '0'
             ignore-unfixed: true
@@ -113,16 +113,16 @@ Aunque sigo teniendo GitHub para cosas puntuales, desde hace más de un año que
     ```yaml
         - name: Create Issue
             env:
-            API_TOKEN: ${{ secrets.ORG_ISSUES_TOKEN }}
+            API_TOKEN: {% raw %}${{ secrets.ORG_ISSUES_TOKEN }}{% endraw %}
             run: |
             ISSUE_TITLE="Security report $(date +'%d/%m/%Y')"
             ISSUE_CONTENT=$(cat 'image-scan.txt' 'code-scan.txt')
             curl -X POST -H "Authorization: token ${API_TOKEN}" -H "Content-Type: application/json" \
                 -d "{\"title\": \"$ISSUE_TITLE\", \"body\": \"$ISSUE_CONTENT\"}" \
-                https://gitea.host.tld/api/v1/repos/user-or-org-name/${{ steps.meta.outputs.REPO_NAME }}/issues
+                https://gitea.host.tld/api/v1/repos/user-or-org-name/{% raw %}${{ steps.meta.outputs.REPO_NAME }}{% endraw %}/issues
     ```
 
-Podemos guardar el archivo, pero no hemos terminado. En el último paso, podemos ver que hemos definido la variable `API_TOKEN` y hace referencia a `${{ secrets.ORG_ISSUES_TOKEN }}`. Este es un secreto que solo el CI puede consultar. Pero claro, primero debemos crearlo.
+Podemos guardar el archivo, pero no hemos terminado. En el último paso, podemos ver que hemos definido la variable `API_TOKEN` y hace referencia a `{% raw %}${{ secrets.ORG_ISSUES_TOKEN }}{% endraw %}`. Este es un secreto que solo el CI puede consultar. Pero claro, primero debemos crearlo.
 
 ### Definiendo el secreto
 
@@ -151,7 +151,7 @@ Como punto de mejora, podemos hacer que Trivy nos devuelva los resultados en for
 ## TL;DR
 
 1. Crear un secreto con el API Token para crear issues en el proyecto. Llamarlo `ORG_ISSUES_TOKEN` y guardarlo en el proyecto o la organización.
-2. Usamos este código en como workflow:
+2. Usamos este código como workflow:
     ````yaml
     name: Security Scan
 
@@ -177,7 +177,7 @@ Como punto de mejora, podemos hacer que Trivy nos devuelva los resultados en for
         - name: Image Scan
             uses: aquasecurity/trivy-action@master
             with:
-            image-ref: 'gitea.host.tld/user-or-org-name/${{ steps.meta.outputs.REPO_NAME }}:latest'
+            image-ref: 'gitea.host.tld/user-or-org-name/{% raw %}${{ steps.meta.outputs.REPO_NAME }}{% endraw %}:latest'
             format: 'table'
             exit-code: '0'
             ignore-unfixed: true
@@ -193,11 +193,11 @@ Como punto de mejora, podemos hacer que Trivy nos devuelva los resultados en for
             exit-code: '0'
         - name: Create Issue
             env:
-            API_TOKEN: ${ { secrets.SHIPYARD_ISSUES_TOKEN } }
+            API_TOKEN: {% raw %}${{ secrets.SHIPYARD_ISSUES_TOKEN }}{% endraw %}
             run: |
             ISSUE_TITLE="Security report $(date +'%d/%m/%Y')"
             ISSUE_CONTENT=$(cat 'image-scan.txt' 'code-scan.txt')
             curl -X POST -H "Authorization: token ${API_TOKEN}" -H "Content-Type: application/json" \
                 -d "{\"title\": \"$ISSUE_TITLE\", \"body\": \"$ISSUE_CONTENT\"}" \
-                https://gitea.host.tld/api/v1/repos/shipyard/${{ steps.meta.outputs.REPO_NAME }}/issues          
+                https://gitea.host.tld/api/v1/repos/shipyard/{% raw %}${{ steps.meta.outputs.REPO_NAME }}{% endraw %}/issues          
     ````
