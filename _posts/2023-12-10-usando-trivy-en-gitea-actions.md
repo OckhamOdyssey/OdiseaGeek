@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Usando Trivy en Gitea Actions. Escaneo de vulnerabilidades con herramientas de código abierto.
-date: 2023-12-10 21:22:00 +02:00
+date: 2023-12-12 17:31:00 +02:00
 type: post
 password: ''
 status: publish
